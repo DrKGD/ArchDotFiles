@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Import ./.COMMON
+source "$HOME/.config/i3/.COMMON"
+
+# Set Logitech Colors
+ratbagctl 'Logitech G733 Gaming Headset' led 0 set mode on color 179AFF
+ratbagctl 'Logitech G733 Gaming Headset' led 1 set mode on color FF9507 
+
+# Run awesome
+exec i3 
+
