@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Import ./.COMMON
+source "$HOME/.config/i3/.COMMON"
+
+# Run awesome
+exec i3 
+

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Import ./.COMMON
 source "$HOME/.config/i3/.COMMON"
