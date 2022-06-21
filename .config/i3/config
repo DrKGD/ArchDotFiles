@@ -18,7 +18,7 @@ mouse_warping none
 
 include ./setup/appearance.i3.inc
 include ./setup/defaults.i3.inc
-include ./setup/'PROFILE'.i3.inc
+include ./setup/'echo $PROFILE'.i3.inc
 
 # Allow moving between monitors
 force_focus_wrapping no

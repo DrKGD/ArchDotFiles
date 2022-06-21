@@ -2,7 +2,7 @@
 ## i3 - Desktop specific settings										 ##
 #######################################################
 
-gaps top 18
+gaps top 38
 gaps bottom 2
 gaps left 2
 gaps right 2
