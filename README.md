@@ -22,6 +22,8 @@ The following was written following this [https://www.atlassian.com/git/tutorial
 ## TODO(s)
 - [ ] Application config(s)
 	- [ ] Editor (nvim)
+	- [ ] Terminal (wezterm)
+		- [ ] macro to start neovim in the pwd
 	- [ ] PDF Viewer (sioyek)
 	- [ ] Screen Compositor (picom)
 	- [ ] Status line (polybar)
