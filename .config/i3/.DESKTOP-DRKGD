@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export readonly PROFILE='desktop'
+
 # Import ./.COMMON
 source "$HOME/.config/i3/.COMMON"
 

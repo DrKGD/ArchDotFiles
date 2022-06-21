@@ -161,6 +161,7 @@
 	vim.cmd([[augroup IndexTypes 
 		autocmd!
 		autocmd BufRead,BufNewFile,BufReadPost *.cls		set ft=tex
+		autocmd BufRead,BufNewFile,BufReadPost *.i3.inc	set ft=i3config
 		autocmd BufRead,BufNewFile,BufReadPost .neoproj set ft=lua 
 	augroup END]])
 

@@ -16,50 +16,23 @@ focus_follows_mouse no
 # Don't move mouse on focus change
 mouse_warping none
 
-## Gaps, Borders
-for_window [class=".*"] border pixel 2, split horizontal 
-hide_edge_borders both 
-
-# Gaps between windows, gaps from top of the screen (polybar)
-gaps top 2
-gaps bottom 2
-gaps left 2
-gaps right 2
-gaps inner 6 
-
-## Colors
-# class										border  backgr. text    indicator child_border
-client.focused					#ffffff #ffffff #ffffff #179aff		#ff9507
-client.focused_inactive #ffffff #ffffff #ffffff #004ffd		#552f00
-client.unfocused				#ffffff #ffffff #ffffff #004ffd		#552f00
-client.urgent						#2f343a #900000 #ffffff #900000		#900000
-client.placeholder			#000000 #0c0c0c #ffffff #000000		#0c0c0c
-client.background				#ffffff
+include ./setup/appearance.i3.inc
+include ./setup/defaults.i3.inc
+include ./setup/'PROFILE'.i3.inc
 
 # Allow moving between monitors
 force_focus_wrapping no
 
 ### Variables
 ## Scripts folder
-set $layouts $HOME/.config/i3$HOME/layouts/
 set $sk $HOME/.config/i3/sk
 
-## Set default applications
-set $browser "firefox"
-set $incognito "firefox --private-window --"
-set $terminal "wezterm"
-set $editor "nvim"
-set $runeditor "wezterm start nvim" 
-set $runmp "wezterm start ncmpcpp"
 
 ## Modes
 set $launcher "run"
 set $mediacontrol "media control"
 set $launcher-system "system"
 set $edit "edit"
-set $ws-manager "ws-manager"
-set $ws-manager-save "ws-manager:save"
-set $ws-manager-load "ws-manager:load"
 set $i3_resurrect i3-resurrect
 
 ## Setup workspaces
@@ -72,11 +45,6 @@ set $ws-mi1 "CodeEnv"
 # Monitor right
 set $ws-rx1 "default"
 
-## Monitors 
-# Define monitors
-set $24tl DP-11
-set $27tm DVI-I-1
-set $24tr DVI-D-0
 
 # Assign workspaces
 # workspace $ws-sx1 output $24tl
@@ -103,7 +71,6 @@ floating_modifier $leader
 
 
 ## Move to the next output
-## BUG: Have no idea why foucs output left works and right does not
 bindsym $leader+Left exec --no-startup-id "i3-msg 'focus output left'"
 bindsym $leader+Right exec  --no-startup-id "i3-msg 'focus output right'"
 
@@ -141,7 +108,7 @@ bindsym $leader+Tab exec rofi -show window
 bindsym $leader+$enter floating toggle
 
 # Kill current focussed window
-bindsym $leader++q kill
+bindsym $leader+q kill
 bindsym $altkey+F4 kill
 
 # Reload configuration
@@ -216,61 +183,6 @@ mode $edit {
 		bindsym $leader+e mode "default"
 	}
 
-## Handle workspace(s)
-mode $ws-manager {
-		# Cycle between workspaces on the current output 
-		# bindsym n workspace next_on_output
-		# bindsym p workspace prev_on_output
-
-		# Switch to save mode
-		bindsym s mode $ws-manager-save 
-
-		# Switch to load mode
-		bindsym l mode $ws-manager-load
-
-
-		bindsym $shift+Delete [workspace=__focused__] kill
-
-		bindsym $enter mode "default"
-		bindsym $esc mode "default"
-		bindsym $leader+w mode "default"
-	}
-
-## Save up to 10 layouts
-mode $ws-manager-save {
-		bindsym 1 exec "$sk/savelayout.sh $layouts/1", mode "default"
-		# bindsym 1 exec "$i3_resurrect save --profile p1 --swallow=class", mode "default"
-		# bindsym 2 exec "$i3_resurrect save --profile p2 --swallow=class", mode "default"
-		# bindsym 3 exec "$i3_resurrect save --profile p3 --swallow=class", mode "default"
-		# bindsym 4 exec "$i3_resurrect save --profile p4 --swallow=class", mode "default"
-		# bindsym 5 exec "$i3_resurrect save --profile p5 --swallow=class", mode "default"
-		# bindsym 6 exec "$i3_resurrect save --profile p6 --swallow=class", mode "default"
-		# bindsym 7 exec "$i3_resurrect save --profile p7 --swallow=class", mode "default"
-		# bindsym 8 exec "$i3_resurrect save --profile p8 --swallow=class", mode "default"
-		# bindsym 9 exec "$i3_resurrect save --profile p9 --swallow=class", mode "default"
-		# bindsym 0 exec "$i3_resurrect save --profile p0 --swallow=class", mode "default"
-
-		bindsym $enter mode "default"
-		bindsym $esc mode "default"
-}
-
-## Load up to 10 layouts
-mode $ws-manager-load {
-		# bindsym 1 exec "$i3_resurrect restore --profile p1 --programs-only", mode "default"
-		# bindsym 2 exec "$i3_resurrect restore --profile p2 --programs-only", mode "default"
-		# bindsym 3 exec "$i3_resurrect restore --profile p3 --programs-only", mode "default"
-		# bindsym 4 exec "$i3_resurrect restore --profile p4 --programs-only", mode "default"
-		# bindsym 5 exec "$i3_resurrect restore --profile p5 --programs-only", mode "default"
-		# bindsym 6 exec "$i3_resurrect restore --profile p6 --programs-only", mode "default"
-		# bindsym 7 exec "$i3_resurrect restore --profile p7 --programs-only", mode "default"
-		# bindsym 8 exec "$i3_resurrect restore --profile p8 --programs-only", mode "default"
-		# bindsym 9 exec "$i3_resurrect restore --profile p9 --programs-only", mode "default"
-		# bindsym 0 exec "$i3_resurrect restore --profile p0 --programs-only", mode "default"
-
-		bindsym $enter mode "default"
-		bindsym $esc mode "default"
-}
-
 ## Run program
 mode $launcher {
 		# Editor in home directory
@@ -291,9 +203,8 @@ mode $launcher {
 		# Browser in incognito 
 		bindsym $shift+b exec $incognito, mode "default"
 
-		bindsym $enter mode "default"
+		# Exit
 		bindsym $esc mode "default"
-		bindsym $leader+r mode "default"
 	}
 
 
@@ -310,7 +221,7 @@ mode $mediacontrol {
 		bindsym equal exec playerctl volume +5
 		bindsym minus exec playerctl volume -5
 
-		bindsym $enter mode "default"
+		# Exit
 		bindsym $esc mode "default"
 	}
 
