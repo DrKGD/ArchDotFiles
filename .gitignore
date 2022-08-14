@@ -43,9 +43,3 @@
 # custom scripts
 !.config/scripts/
 !.config/scripts/*
-
-# sysj configurer 
-!.config/sysj/
-!.config/sysj/*
-
-

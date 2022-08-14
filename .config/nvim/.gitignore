@@ -1,2 +1,8 @@
-# Ignore plugin folder, as contains it contains packer_compiled file(s)
-plugin/01-compiled.lua
+# Whitelist everything (takes in consideration $HOME/.gitignore)
+!*
+
+# Ignore these folders 
+old_config/
+
+# Ignore compiled 
+plugin/02-compiled.lua
