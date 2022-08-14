@@ -83,7 +83,7 @@ DEFAULT.palette.i3	= (function()
 
 	local rgx			= [[([^:]+):(#[%x][%x][%x][%x][%x][%x])(.*)]]
 	local i3query = require('util.ext')
-		.run([[i3-msg -t get_config | grep "set \$color_" | awk '{sub(/\$color_/, "", $2); printf "%s:%s\n", $2, $3}']])
+		.run([[cat $HOME/.config/i3/conf.d/30-visual.i3.inc | grep "set \$color_" | awk '{sub(/\$color_/, "", $2); printf "%s:%s\n", $2, $3}']])
 
 	for _, line in ipairs(i3query) do
 		local name, value, _ = line:match(rgx)

@@ -1,2 +1,5 @@
+# Whitelist everything (takes in consideration $HOME/.gitignore)
+!*
+
 # Ignore old configurations 
 old_config/
