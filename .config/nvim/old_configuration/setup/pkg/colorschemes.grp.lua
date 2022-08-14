@@ -7,6 +7,7 @@ return {
 	'Shadorain/shadotheme',
 	'marko-cerovac/material.nvim',
 	'tanvirtin/monokai.nvim',
+	'navarasu/onedark.nvim',
 	'bluz71/vim-moonfly-colors',
 	'folke/tokyonight.nvim',
 	'rafamadriz/neon',

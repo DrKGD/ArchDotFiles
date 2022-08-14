@@ -1,7 +1,13 @@
-(function() 
+-------------------------------------
+-- Neovim global configuraiton     --
+-------------------------------------
+(function()
 	--- Disable netwr (file-tree explorer)
-	vim.g.loaded_netrw = 1
-	vim.g.loaded_netrwPlugin = 1
+	-- vim.g.netrw_silent = 1
+	-- vim.g.loaded_netrw = 1
+	-- vim.g.loaded_netrwPlugin = 1
+	-- vim.g.did_load_filetypes = 0
+	-- vim.g.do_filetype_lua = 1
 
 	-----------------
 	-- Appearance  --
@@ -16,15 +22,21 @@
 	vim.opt.autoindent = true
 	vim.opt.smartindent = false
 
-	vim.opt.cmdheight = 3
-	vim.opt.cmdwinheight = 10
+	vim.opt.cmdheight			= 1
+	vim.opt.cmdwinheight	= 5
+	-- vim.opt.report				= 10
+	-- vim.opt.shortmess			= 'astWAIcTF'
 
+	-- Disable global cursor line
 	vim.opt.cursorline = false
-	vim.cmd([[set guicursor=]])
+	vim.api.nvim_create_autocmd({'VimEnter', 'WinEnter', 'BufWinEnter'},
+		{ callback = function() vim.opt_local.cursorline = true end})
+	vim.api.nvim_create_autocmd({'WinLeave'},
+		{ callback = function() vim.opt_local.cursorline = true end})
 
-	vim.opt.wrap = true
-	vim.opt.textwidth = 0
-	vim.opt.wrapmargin = 0
+	-- Always textwrap
+	vim.opt.wrap				= true
+	vim.opt.textwidth		= 0
 
 	vim.opt.number = false
 	vim.opt.relativenumber = true
@@ -44,12 +56,13 @@
 	vim.opt.backspace = 'indent,eol,start'
 	vim.opt.mouse = 'a'
 
-	--- No autocomment
-	vim.opt.formatoptions:remove({'c','r','o'})
-	vim.cmd([[augroup FormatOptions
-					autocmd!
-					autocmd BufEnter * set formatoptions-=cro
-	augroup END]])
+	-- Shell
+	vim.opt.shell	= '/bin/bash'
+
+	--- Override formatoptions
+	-- default formatoptions were 'tcqj' FYI
+	local fmtop = ''
+	vim.api.nvim_create_autocmd({'BufEnter'}, {callback = function() vim.opt.formatoptions = fmtop end})
 
 	--- Timeouts
 	vim.opt.timeoutlen = 500
@@ -73,13 +86,13 @@
 	vim.opt.tabpagemax = 10
 
 	--- Automatically handlefd folding
-	vim.opt.foldlevel = 0
-	vim.opt.foldlevelstart = 99
-	vim.cmd([[augroup RememberFolds
-		autocmd!
-		au BufWinLeave ?* mkview 1
-		au BufWinEnter ?* silent! loadview 1
-	augroup END]])
+	-- vim.opt.foldlevel = 0
+	-- vim.opt.foldlevelstart = 99
+	-- vim.cmd([[augroup RememberFolds
+	-- 	autocmd!
+	-- 	au BufWinLeave ?* mkview 1
+	-- 	au BufWinEnter ?* silent! loadview 1
+	-- augroup END]])
 
 	-- vim.opt.foldmethod = 'indent'
 	-- vim.opt.foldenable = false
@@ -104,27 +117,28 @@
 
 	--- Hidden characters
 	vim.opt.list = false
-	vim.o.showbreak = PREFERENCES.misc.showbreak
+	vim.o.showbreak		= PREFERENCES.misc.showbreak
 	vim.opt.listchars = PREFERENCES.misc.listchars
 	vim.opt.fillchars = { eob = ' ' }
 
 	-----------------
 	-- Other       --
 	-----------------
-	--- Completition
-	vim.opt.completeopt = 'menuone,noinsert'
-	vim.opt.showmode = false
+	-- Setup completion engine 
+	vim.opt.completeopt = 'menu,menuone,noselect'
+	vim.opt.showmode		= true
+	vim.opt.pumheight		= 20
+	vim.opt.pumblend		= 10
 
 	--- Spell
-	vim.g.mapleader = ','
-	vim.opt.spelllang = 'it,en_us'
+	vim.opt.spelllang = 'en,cjk,it'
 	vim.opt.spellsuggest = 'fast, 20'
 
 	--- Set Leader
 	vim.g.mapleader = ','
 
-	--- Evaluate profile configuration
-	for _, h in pairs(PREFERENCES.hooks) do h() end
+	--- Seed math.randomseed
+	math.randomseed(os.time())
 
 	-----------------
 	-- Directories --
@@ -135,34 +149,23 @@
 	vim.opt.undofile = true
 	vim.opt.autoread = true
 	vim.opt.undolevels = 500
-	vim.opt.shortmess = 'AS'
 	vim.opt.directory = PREFERENCES.dirs.swap
 	vim.opt.backupdir = PREFERENCES.dirs.back
 	vim.opt.undodir   = PREFERENCES.dirs.undo
 
-	local _ = (function()
-		local isdir	= require('utils.path').directoryExists
-		local mkdir = require('utils.file').mkdir
-
-		if not isdir(PREFERENCES.dirs.swap) then
-			mkdir(vim.fn.fnamemodify(PREFERENCES.dirs.swap,':p:h')) end
-		if not isdir(PREFERENCES.dirs.back) then
-			mkdir(vim.fn.fnamemodify(PREFERENCES.dirs.back,':p:h')) end
-		if not isdir(PREFERENCES.dirs.undo) then
-			mkdir(vim.fn.fnamemodify(PREFERENCES.dirs.undo,':p:h')) end
-	end)()
-
+	vim.fn.mkdir(PREFERENCES.dirs.swap, "p")
+	vim.fn.mkdir(PREFERENCES.dirs.back, "p")
+	vim.fn.mkdir(PREFERENCES.dirs.undo, "p")
 
 	-----------------
 	-- Languages --
 	-----------------
-	vim.g['tex_flavor'] = "latex"
-
-	vim.cmd([[augroup IndexTypes 
-		autocmd!
-		autocmd BufRead,BufNewFile,BufReadPost *.cls		set ft=tex
-		autocmd BufRead,BufNewFile,BufReadPost *.i3.inc	set ft=i3config
-		autocmd BufRead,BufNewFile,BufReadPost .neoproj set ft=lua 
-	augroup END]])
-
-	end)()
+	-- vim.g['tex_flavor'] = "latex"
+	--
+	-- vim.cmd([[augroup IndexTypes 
+	-- 	autocmd!
+	-- 	autocmd BufRead,BufNewFile,BufReadPost *.cls		set ft=tex
+	-- 	autocmd BufRead,BufNewFile,BufReadPost *.i3.inc	set ft=i3config
+	-- 	autocmd BufRead,BufNewFile,BufReadPost .neoproj set ft=lua 
+	-- augroup END]])
+end)()

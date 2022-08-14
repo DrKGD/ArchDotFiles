@@ -1,13 +1,17 @@
 #!/bin/bash
 
+## Profile 
 export readonly PROFILE='desktop'
+export readonly MOUNTPOINT='/mnt/ram'
+export readonly SCREENS="$(xrandr --listactivemonitors | awk '/^[[:blank:]]+/{print $2}' | tr -dc '[:alnum:]-\n\r')"
 
 # Import ./.COMMON
 source "$HOME/.config/i3/.COMMON"
+xrdb -merge "$HOME/.config/xrdb/profile/desktop"
 
 # Set Logitech Colors
-ratbagctl 'Logitech G733 Gaming Headset' led 0 set mode on color 179AFF
-ratbagctl 'Logitech G733 Gaming Headset' led 1 set mode on color FF9507 
+# ratbagctl 'Logitech G733 Gaming Headset' led 0 set mode on color 179AFF
+# ratbagctl 'Logitech G733 Gaming Headset' led 1 set mode on color FF9507 
 
 # Run awesome
 exec i3 

@@ -1,2 +1,2 @@
 # Ignore plugin folder, as contains it contains packer_compiled file(s)
-plugin/
+plugin/01-compiled.lua

@@ -1,0 +1,40 @@
+#######################################################
+##           i3 - deatharte configuration						 ##
+#######################################################
+
+## Reload configuration 
+# exec_always --no-startup-id "source <(/home/deatharte/.config/sysj/sysj.sh)"
+
+### Defaults
+## Set default applications
+set $browser "firefox"
+set $incognito "firefox --private-window"
+set $terminal "wezterm"
+set $cwdterminal wezterm start --cwd $(cat $MOUNTPOINT/cwd)
+set $editor "nvim"
+set $explorer "dolphin"
+set $whatsapp "firefox --new-window https://web.whatsapp.com"
+
+## Custom scripts folder
+set $sk $HOME/.config/i3/sk
+
+## Define keys 
+set $leader Mod4			
+set $shift Shift 
+set $ctrl Ctrl 
+set $altkey Mod1 
+set $esc Escape
+set $enter Return
+
+## Define modes
+set_from_resource $eggxe i3.mode-run		"run"
+set_from_resource $eggme i3.mode-media	"media"
+set_from_resource $eggse i3.mode-sudo		"sudo"
+set_from_resource $egged i3.mode-edit		"edit"
+
+include ./setup/startup.i3.inc
+include ./setup/keybindings.i3.inc
+include ./setup/appearance.i3.inc
+include ./setup/modes.i3.inc
+include ./setup/$PROFILE.i3.inc
+

@@ -25,7 +25,7 @@ ssh-unauth() {
 	}
 
 # Wrappers
-alias neovim="$HOME/.config/nvim/nvimlaunch.sh"
+alias neovim="$HOME/.config/nvim/launch.sh"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.ArchDotFiles/ --work-tree=$HOME'
 
 # Computer logoff
@@ -34,7 +34,7 @@ alias sayonara="shutdown -h now"
 alias logoff="sudo systemctl restart sddm"
 
 # Edit this file
-alias aliases='neovim "$HOME/.alias"'
+alias aliases='neovim "$HOME/.alias" && source $HOME/.alias'
 alias readmeplenty='neovim "$HOME/README.md"'
 alias my-zshrc='neovim "$HOME/.zshrc"'
 alias reload-my-zshrc='source "$HOME/.zshrc"'
@@ -44,10 +44,13 @@ alias wezcfg="$HOME/.config/wezterm/"
 alias awecfg="$HOME/.config/awesome/"
 alias nvimcfg="$HOME/.config/nvim/"
 alias polycfg="$HOME/.config/polybar/"
+alias xrdbcfg="$HOME/.config/xrdb/"
+alias sysj="$HOME/.config/sysj/"
 alias mpcfg="$HOME/.config/ncmpcpp/"
 alias i3cfg="$HOME/.config/i3/"
 alias sk="$HOME/.config/scripts/"
 alias pdfcfg="$HOME/.config./sioyek/"
+alias dunstcfg="$HOME/.config/dunst/"
 
 # LS 
 alias lt='ls --human-readable --size -1 -S --classify'
@@ -81,6 +84,12 @@ alias viewpdf="sioyek"
 # Fix the terminal on binary display
 alias tfix='reset; stty sane; tput rs1; clear; echo -e "\033c"'
 alias pacmirror='reflector --latest 5 --sort rate --save /etc/pacman.d/mirrorlist'
+
+# Remount everything
+alias remount='sudo systemctl daemon-reload && sudo mount -a && findmnt'
+
+# Testbench
+alias testbench=$HOME/Projects/testbench/
 
 
 

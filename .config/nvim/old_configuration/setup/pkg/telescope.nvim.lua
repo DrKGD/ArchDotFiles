@@ -2,6 +2,7 @@
 -- Telescope
 -- Should I really explain what it does?
 --
+-- BUG: https://github.com/wbthomason/packer.nvim/pull/786 
 return { 'nvim-telescope/telescope.nvim',
 	after			=	{ 'utils.nvim' },
 	requires = {
@@ -115,7 +116,6 @@ return { 'nvim-telescope/telescope.nvim',
 				['<Down>']			= act.preview_scrolling_down,
 				['<ESC>']				= act.close,
 				['<C-q>']				= act.close,
-				--['<Leader>a']		= macro.new,
 
 				-- Disabled
 				['<C-x>']				= unbinded,
@@ -148,6 +148,8 @@ return { 'nvim-telescope/telescope.nvim',
 
 		tel.setup({
 			defaults = {
+				borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+				set_env = { ["COLORTERM"] = "truecolor" },
 				prompt_prefix 	= ' ',
 				selection_caret	= '  ',
 				entry_prefix		= ' ',
@@ -156,10 +158,11 @@ return { 'nvim-telescope/telescope.nvim',
 				-- set_env = { ['COLORTERM'] = 'truecolor' },
 				layout_strategy = 'flex',
 				layout_config = {
-					horizontal	= { width = 0.85, height = 0.85 },
+					horizontal	= { width = 0.85, height = 0.85, prompt_position = "bottom", preview_width = 0.65 },
 					vertical		= { width = 0.80, height = 0.95 },
 					flex				= { flip_columns = 140 } ,
 				},
+
 
 				mappings = mappings
 			},
@@ -268,9 +271,11 @@ return { 'nvim-telescope/telescope.nvim',
 			local ppath = vim.fn.getcwd() .. "/.telescope.lua"
 
 			if path.fileExists(ppath) then
-				local settings = loadfile(ppath)()
+				local settings = require('util.generic').lodTable(ppath)
 				ignore_table = vim.tbl_deep_extend("force", ignore_table, settings or {})
 			end
+
+			print(vim.inspect(ignore_table))
 
 			return require(tbl)[prompt]({
 				file_ignore_patterns = ignore_table,

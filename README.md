@@ -23,13 +23,16 @@ The following was written following this [https://www.atlassian.com/git/tutorial
 - [ ] Application config(s)
 	- [ ] Editor (nvim)
 	- [ ] Terminal (wezterm)
-		- [ ] macro to start neovim in the pwd
 	- [ ] PDF Viewer (sioyek)
 	- [ ] Screen Compositor (picom)
 	- [ ] Status line (polybar)
-	- [ ] DE (i3)
-	- [ ] Music Player (mpd, ncmpcpp)
-	- [ ] Scripts
+	- [ ] Greater (ssdm)
+	- [x] DE (i3)
+		- [x] Keybindings
+		- [x] Workspaces 
+		- [x] Local-to-device configuration 
+	- [x] Music Player (mpd, ncmpcpp)
+	- [x] Scripts
 - [ ] Source(d) files
 	- [x] .zshrc (zsh login shell configuration)
 	- [x] .alias, .env (custom aliases and global envs)

@@ -1,0 +1,17 @@
+{
+	"default" : {
+		"theme" : "Inferno",
+		"file"  : {
+			"themes" : "$HOME/.config/sysj/themes.json"
+		}
+	},
+
+	"desktop" : {
+		"output" : {
+			"sx"		:	"DP-1",
+			"cx"		: "DVI-I-1",
+			"dx"		: "HDMI-0",
+			"tv"		: "DVI-D-0"
+		}
+	}
+}

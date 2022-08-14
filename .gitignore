@@ -1,2 +1,51 @@
-.dotfiles
-.ArchDotFiles
+## Whitelist based .gitignore
+*
+
+## Allow these files
+!.zshrc
+!.p10k.zsh
+!.gitignore
+!.env
+!.alias
+!README.md
+
+## Allow these configuration folders 
+!.config/ 
+
+# nvim
+!.config/nvim/
+!.config/nvim/*
+
+# i3
+!.config/i3/
+!.config/i3/*
+
+# mpd
+!.config/mpd/
+!.config/mpd/*
+
+# wezterm
+!.config/wezterm/
+!.config/wezterm/*
+
+# sioyek
+!.config/sioyek/
+!.config/sioyek/*
+
+# ncmpcpp
+!.config/ncmpcpp/
+!.config/ncmpcpp/*
+
+# picom
+!.config/picom/
+!.config/picom/*
+
+# custom scripts
+!.config/scripts/
+!.config/scripts/*
+
+# sysj configurer 
+!.config/sysj/
+!.config/sysj/*
+
+

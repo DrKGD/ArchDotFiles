@@ -1,4 +1,34 @@
+-- TODO: Split configuration on multiple files
 local wezterm = require('wezterm')
+local imsg		= wezterm.log_info
+local emsg		= wezterm.log_error
+local wmsg		= wezterm.log_warning
+
+local wezcfg	= os.getenv('HOME') .. '/.config/wezterm/setup'
+imsg(wezcfg)
+
+
+
+-- local wezcfg = os.getenv('WEZTERM_CONFIG_DIR') .. '/setup'
+
+
+-- local dofile = function(fname)
+-- 	local f, e = loadfile(wezcfg .. '/' .. fname)
+-- 	if e then emsg(string.format('<%s> does not exist!', fname))
+-- end
+
+-- local wezcfg = os.getenv('WEZTERM_CONFIG_DIR') .. '/setup'
+
+-- local dofile = function(fname)
+-- 	local f, e = loadfile(string.format('%s/%s.lua', wezcfg, fname))
+--
+-- 	if e then wezterm.log_info(string.format('Error on dofile: <%s>', e)) end
+-- end
+
+
+-- local f, e = loadfile(wezcfg .. "/keybindings.lua")
+-- wezterm.log_info(string.format('%s: <%s>!', e, f))
+
 
 -- Determine which computer
 local PROFILE = (function()
@@ -102,6 +132,7 @@ wezterm.on("toggle-opacity", function(window, pane)
 	window:set_config_overrides(overrides)
 end)
 
+
 -- Local
 local ispath = function(p) return p:match"/" end
 local tail = function(p) return p:match"[^\\/]*$" end
@@ -193,6 +224,112 @@ local function font_fb(font)
 	return wezterm.font_with_fallback(selected_fonts)
 end
 
+-- Save, Load, Revert cwd
+-- TODO: Refractor with get_foreground_process_info: return nvim/zsh instead
+local getProcess = function(pane) return basename(pane:get_foreground_process_name()) end
+local isTerminal = function(pane) 
+	local p = getProcess(pane)
+	if not p then wezterm.log_error("Couldn't get process") return false end	
+	if p~='zsh' then wezterm.log_error(p .. " was not recognized!") return false end
+
+	return true
+end
+
+
+local wrapSendText	= function(cmd, pid) return string.format([[%s | wezterm cli send-text --pane-id %d --no-paste &]], cmd, pid) end
+local saveState			= 'save-state'
+local cwdLoadSave		=	function(id) return string.format('%s/%s_%d', os.getenv("MOUNTPOINT"), saveState, id) end 
+
+-- TODO: Clear any input
+local cwdClearScr		= function(pid) os.execute(wrapSendText([[echo -en '\x15']], pid)) end
+
+
+-- TODO: Refractor having more than one savestate
+-- TODO: Refractor name to "savestate"
+local saveState			= function(pane, id)
+	if not isTerminal(pane) then return end
+	if not id then return end
+	if not cwdLoadSave then wezterm.log_error('$MOUNTPOINT not defined!') return end
+	local s_cwd = pane:get_current_working_dir():gsub([[^file://[^/]*]], "")
+	wezterm.log_info(s_cwd)
+
+	local filename = cwdLoadSave(id)
+	local file = io.open(filename, 'w+')
+	if not file then wezterm.log_error(string.format('File <%s> could not be written!', filename)) return end
+	file:write(s_cwd .. '\n')
+	wezterm.log_info(string.format('<%s> saved!', filename))
+	file:close()
+end
+
+local loadState			= function(pane, id)
+	if not isTerminal(pane) then return end
+	if not id then return end
+	if not cwdLoadSave then wezterm.log_info('$MOUNTPOINT not defined!') return end
+
+	local filename = cwdLoadSave(id)
+	local file = io.open(filename, 'r')
+	if not file then wezterm.log_error(string.format('File <%s> could not be read!', filename)) return end
+	local pid = pane:pane_id()
+	local l_cwd = file:read()
+	wezterm.log_info(l_cwd)
+
+	cwdClearScr(pid)
+	local cmd = wrapSendText(string.format([[echo 'cd %s']], l_cwd), pid)
+	wezterm.log_info(string.format('<%s> loaded!', filename))
+	os.execute(cmd)
+end
+
+wezterm.on("save-state-1", function(_, pane) saveState(pane, 1) end)
+wezterm.on("save-state-2", function(_, pane) saveState(pane, 2) end)
+wezterm.on("save-state-3", function(_, pane) saveState(pane, 3) end)
+wezterm.on("save-state-4", function(_, pane) saveState(pane, 4) end)
+wezterm.on("save-state-5", function(_, pane) saveState(pane, 5) end)
+
+wezterm.on("load-state-1", function(_, pane) loadState(pane, 1) end)
+wezterm.on("load-state-2", function(_, pane) loadState(pane, 2) end)
+wezterm.on("load-state-3", function(_, pane) loadState(pane, 3) end)
+wezterm.on("load-state-4", function(_, pane) loadState(pane, 4) end)
+wezterm.on("load-state-5", function(_, pane) loadState(pane, 5) end)
+
+
+wezterm.on("save-cwd", function(_, pane)
+	if not isTerminal(pane) then return end
+	if not cwdLoadSave then wezterm.log_error('$MOUNTPOINT not defined!') return end
+	local s_cwd = pane:get_current_working_dir():gsub([[^file://[^/]*]], "")
+	wezterm.log_info(s_cwd)
+
+	local file = io.open(cwdLoadSave, 'w+')
+	if not file then wezterm.log_error('File could not be opened!') return end
+	file:write(s_cwd .. '\n')
+	file:close()
+end)
+
+wezterm.on("load-cwd", function(_, pane)
+	if not isTerminal(pane) then return end
+	if not cwdLoadSave then wezterm.log_info('$MOUNTPOINT not defined!') return end
+
+	local file = io.open(cwdLoadSave, 'r')
+	if not file then wezterm.log_error('File could not be opened!') return end
+	local pid = pane:pane_id()
+	local l_cwd = file:read()
+	wezterm.log_info(l_cwd)
+
+	cwdClearScr(pid)
+	local cmd = wrapSendText(string.format([[echo 'cd %s']], l_cwd), pid)
+	wezterm.log_info(string.format('<%s> was ran!', cmd))
+	os.execute(cmd)
+end)
+
+wezterm.on("revert-cwd", function(_, pane)
+	if not isTerminal(pane) then return end
+	local pid = pane:pane_id()
+
+	cwdClearScr(pid)
+	local cmd = wrapSendText([[echo 'cd -']], pid)
+	wezterm.log_info(string.format('<%s> was ran!', cmd))
+	os.execute(cmd)
+end)
+
 return {
 	animation_fps = 144,
   check_for_updates = true,
@@ -211,7 +348,7 @@ return {
 	color_scheme = "Ollie",
 
 	-- Exit behavior
-	window_close_confirmation = "NeverPrompt",
+	-- window_close_confirmation = "NeverPrompt",
 	exit_behavior = "Close",
 
 	-- Tab Bar below and usually hidden
@@ -239,11 +376,11 @@ return {
 	-- Background
 	-- window_background_image = "D:\\hackers_2.jpg",
 	text_background_opacity = 1.0,
-	window_background_opacity = 0.7,
+	window_background_opacity = 0.90,
 	window_background_image_hsb = {
     brightness = 0.025,
     hue = 1.0,
-    saturation = 0.35,
+    saturation = 0.25,
   },
 
 	inactive_pane_hsb = {
@@ -265,61 +402,20 @@ return {
   },
 
 	--- Keybindings
-	-- Debug by running wizterm.exe inside of wizterm
+	-- Debug by running wezterm.exe inside of wezterm
 	debug_key_events = false,
 	use_dead_keys = false,
-
-	-- Right Ctrl is mapped to Numpad0
-	leader = { key = "Numpad0", timeout_milliseconds = 1000},
-
+	
+	-- BUG: Numpad0 is Insert?
+	-- Right Ctrl is mapped to Numpad0 (Insert)
+	leader = { key = "Insert", mods="", timeout_milliseconds = 1000},
 
 	keys = {
-		--- Panes navigation
-		-- Open panes and close pane
-		{ key = 's', mods = "LEADER", action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain"}}},
-		{ key = 'v', mods = "LEADER", action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain"}}},
-		{ key = "q", mods = "LEADER|SHIFT", action = wezterm.action { CloseCurrentPane = { confirm = false }}},
-
-		{ key = 'z', mods = "LEADER", action = "TogglePaneZoomState" },
-
-		-- Move between panes with ease
-		{key = "RightArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Right"}},
-		{key = "LeftArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Left"}},
-		{key = "UpArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Up"}},
-		{key = "DownArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Down"}},
-
-		{key = "l", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Right"}},
-		{key = "h", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Left"}},
-		{key = "k", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Up"}},
-		{key = "j", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Down"}},
-
-		-- Resize pane
-		{key = "RightArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Right", 5}}},
-		{key = "LeftArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Left", 5}}},
-		{key = "UpArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Up", 5}}},
-		{key = "DownArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Down", 5}}},
-
-		--- Navigation between tabs
-		-- Navigate or search for a specific tab
-		{ key = '/', mods = "LEADER", action = "ShowTabNavigator"},
-
-		-- Spawn tab
-		{ key = 'n', mods = 'LEADER', action = wezterm.action { SpawnTab="CurrentPaneDomain"}},
-		{ key = 'n', mods = 'CTRL|LEADER', action = wezterm.action { SpawnTab="DefaultDomain"}},
-
-		-- Next or Previous tab
-		{ key = 'a', mods = "LEADER", action = wezterm.action { ActivateTabRelative=-1 }},
-		{ key = 'f', mods = "LEADER", action = wezterm.action { ActivateTabRelative=1 }},
-		{ key = 'q', mods = "LEADER", action = wezterm.action { ActivateTabRelative=-1 }},
-		{ key = 'e', mods = "LEADER", action = wezterm.action { ActivateTabRelative=1 }},
-
 		-- Resize font size
-		-- TODO: Handle window position before and after fullscreen
-		-- FIX: Disabled, bitmap do not support these
 		{ key = '=', mods = "CTRL", action = wezterm.action { EmitEvent = 'capped-increasefontsize'}},
 		{ key = '-', mods = "CTRL", action = wezterm.action { EmitEvent = 'capped-decreasefontsize'}},
 		{ key = '`', mods = "CTRL", action = wezterm.action { EmitEvent = 'reset-fontsize'}},
-		{key="r", mods="LEADER", action="ReloadConfiguration"},
+		{ key = 'r', mods="LEADER", action="ReloadConfiguration" },
 
 		--- Extra
 		-- Toggle Opacity
@@ -328,6 +424,11 @@ return {
 		-- Copy paste
 		{key = "c", mods = "CTRL|SHIFT", action = wezterm.action { CopyTo="Clipboard"}},
 		{key = "v", mods = "CTRL|SHIFT", action = wezterm.action { PasteFrom="Clipboard" }},
+
+		-- Event send-through
+		-- BUG: What
+		{key = "d", mods = "CTRL", action = wezterm.action { SendKey={key="d", mods="CTRL" }}},
+
 
 		-- Page Up / Page down
 		-- TRAP: Binding those will prevent application in-terminal from using them...
@@ -341,16 +442,70 @@ return {
 		-- TODO: Handle window position before and after fullscreen
     {key="F11", action = "ToggleFullScreen"},
 
-		-- Show launcher with custom flags
-		-- {key = 'Enter', mods="LEADER", action = "ShowLauncher"},
-		{key = 'Enter', mods="LEADER", action = wezterm.action { ShowLauncherArgs={
-				flags='FUZZY|DOMAINS|LAUNCH_MENU_ITEMS'
-			}
-		}},
-
 		-- Fix Ctrl-Backspace and Ctrl-enter (F36)
 		{key = 'Backspace', mods="CTRL", action = wezterm.action { SendString="\x08" } },
 		{key = 'Enter', mods="CTRL", action = wezterm.action {SendKey={key="F12", mods="CTRL"}}},
+
+		--- Save, Load and go back cwd
+		-- Save cwd and load it later!
+		{ key = 'phys:1', mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = "save-state-1"}},
+		{ key = 'phys:2', mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = "save-state-2"}},
+		{ key = 'phys:3', mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = "save-state-3"}},
+		{ key = 'phys:4', mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = "save-state-4"}},
+		{ key = 'phys:5', mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = "save-state-5"}},
+		{ key = 'phys:1', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-1"}},
+		{ key = 'phys:2', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-2"}},
+		{ key = 'phys:3', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-3"}},
+		{ key = 'phys:4', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-4"}},
+		{ key = 'phys:5', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-5"}},
+		{ key = '`', mods = "LEADER", action = wezterm.action { EmitEvent = "revert-cwd"}},
+
+		
+
+
+
+		-- DISABLED: not really a use for these in i3
+		-- Show launcher with custom flags
+		-- {key = 'Enter', mods="LEADER", action = "ShowLauncher"},
+		-- {key = 'Enter', mods="LEADER", action = wezterm.action { ShowLauncherArgs=
+		-- 	{ flags='FUZZY|DOMAINS|LAUNCH_MENU_ITEMS' }}},
+		--
+		-- --- Navigation between tabs
+		-- -- Navigate or search for a specific tab
+		-- { key = '/', mods = "LEADER", action = "ShowTabNavigator"},
+		--
+		-- -- Spawn tab
+		-- { key = 'n', mods = 'LEADER', action = wezterm.action { SpawnTab="CurrentPaneDomain"}},
+		-- { key = 'n', mods = 'CTRL|LEADER', action = wezterm.action { SpawnTab="DefaultDomain"}},
+		--
+		-- -- Next or Previous tab
+		-- { key = 'a', mods = "LEADER", action = wezterm.action { ActivateTabRelative=-1 }},
+		-- { key = 'f', mods = "LEADER", action = wezterm.action { ActivateTabRelative=1 }},
+		-- { key = 'q', mods = "LEADER", action = wezterm.action { ActivateTabRelative=-1 }},
+		-- { key = 'e', mods = "LEADER", action = wezterm.action { ActivateTabRelative=1 }},
+		--- Panes navigation
+		-- Open panes and close pane
+		-- { key = 's', mods = "LEADER", action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain"}}},
+		-- { key = 'v', mods = "LEADER", action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain"}}},
+		-- { key = "q", mods = "LEADER|SHIFT", action = wezterm.action { CloseCurrentPane = { confirm = false }}},
+		-- { key = 'z', mods = "LEADER", action = "TogglePaneZoomState" },
+
+		-- Move between panes with ease
+		-- {key = "RightArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Right"}},
+		-- {key = "LeftArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Left"}},
+		-- {key = "UpArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Up"}},
+		-- {key = "DownArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Down"}},
+
+		-- {key = "l", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Right"}},
+		-- {key = "h", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Left"}},
+		-- {key = "k", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Up"}},
+		-- {key = "j", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Down"}},
+
+		-- Resize pane
+		-- {key = "RightArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Right", 5}}},
+		-- {key = "LeftArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Left", 5}}},
+		-- {key = "UpArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Up", 5}}},
+		-- {key = "DownArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Down", 5}}},
 	}
 }
 

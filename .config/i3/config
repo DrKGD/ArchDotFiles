@@ -1,78 +1,110 @@
-#### i3 Configuration
-### Startuo application Run picom
+
+
+set $leader Mod4
+set $bgimage $HOME/.config/i3/space.jpg
+set $sk $HOME/.config/i3/sk
+set $border_size 3
+set $gap_outer 10
+set $gap_inner 8
+set $workspace_social Social
+set $workspace_media Media
+set $workspace_focusi "Focus I"
+set $workspace_termi "Term I"
+set $workspace_termii "Term II"
+set $workspace_focusii "Focus II"
+set $workspace_nav Nav
+set $workspace_misc Misc
+set $workspace_setup Setup
+set $workspace_gaming Gaming
+set $apps_browser firefox
+set $apps_incognito firefox --private-window --
+set $apps_terminal wezterm
+set $apps_cwdTerminal wezterm start --cwd $(cat $MOUNTPOINT/cwd)
+set $apps_editor vscode
+set $apps_fileExplorer dolphin
+set $apps_whatsapp firefox --new-window https://web.whatsapp.com
+set $mode_run run
+set $mode_media media
+set $mode_system sudo
+set $mode_edit edit
+set $color_focus #FC0344
+set $color_elegible #750A26
+set $color_nofocus #520016
+set $color_urgent #FD5D88
+set $color_indicator #FD5D88
+set $color_elgindicator #FC0344
+set $color_unknown #000000
+set $dimamount 0.35
+set $output_sx_screen DP-1
+set $output_sx_gaps_top 5
+set $output_sx_gaps_left 5
+set $output_sx_gaps_right 5
+set $output_sx_gaps_bottom 25
+set $output_cx_screen DVI-I-1
+set $output_cx_gaps_top 30
+set $output_cx_gaps_left 5
+set $output_cx_gaps_right 5
+set $output_cx_gaps_bottom 28
+set $output_dx_screen HDMI-0
+set $output_dx_gaps_top 5
+set $output_dx_gaps_left 5
+set $output_dx_gaps_right 5
+set $output_dx_gaps_bottom 25
+set $output_tv_screen DVI-D-0
+#######################################################
+## i3 - Run-on-startup applications									 ##
+#######################################################
+
+# Current working directory
+exec_always --no-startup-id (killall -9 i3cwd.sh || true) && $HOME/.config/i3/sk/i3cwd.sh $MOUNTPOINT/cwd
+
+# Compositor (picom) 
 exec_always --no-startup-id "picom -b --backend glx --experimental-backends"
 
-# Background image
-exec_always --no-startup-id "xwallpaper --no-randr --tile ~/.config/i3/static_bg.png" 
+# Static background img 
+exec_always --no-startup-id xwallpaper --no-randr --tile $bgimage
 
-# Run Alt Tab
+# alttab utility 
 exec_always --no-startup-id "alttab -d 0 -p none -font \"xft:scientifica-12\" -t 128x60 -i 128x40 -fg \"#179aff\" -frame \"#ff9507\""
-					
-### Globals 
-## Mouse Behaviour(s)
-# Do not follow mouse
-focus_follows_mouse no
 
-# Don't move mouse on focus change
-mouse_warping none
+# polybar (do not refresh configuration)
+exec_always --no-startup-id "$HOME/.config/polybar/launch.sh n" 
 
-include ./setup/appearance.i3.inc
-include ./setup/defaults.i3.inc
-include ./setup/$PROFILE.i3.inc
+#######################################################
+## i3 - Appearance																	 ##
+#######################################################
 
-# Allow moving between monitors
-force_focus_wrapping no
+## Gaps, Borders
+for_window [class=".*"] border pixel $border_size 
+hide_edge_borders both 
 
-### Variables
-## Scripts folder
-set $sk $HOME/.config/i3/sk
+# Global configuration
+gaps outer $gap_outer
+gaps inner $gap_inner
 
-
-## Modes
-set $launcher "run"
-set $mediacontrol "media control"
-set $launcher-system "system"
-set $edit "edit"
-set $i3_resurrect i3-resurrect
-
-## Setup workspaces
-# Monitor left
-set $ws-sx1 "default"
-
-# Monitor central
-set $ws-mi1 "CodeEnv"
-
-# Monitor right
-set $ws-rx1 "default"
+## Colors
+# class										border					backgr					text						indicator					child_border
+client.focused						$color_unknown	$color_unknown	$color_unknown	$color_indicator $color_focus	
+client.focused_inactive 	$color_unknown 	$color_unknown	$color_unknown	$color_elgindicator $color_elegible
+client.unfocused					$color_unknown 	$color_unknown	$color_unknown 	$color_unknown		$color_nofocus
+client.urgent							$color_unknown	$color_unknown	$color_unknown 	$color_urgent			$color_urgent
+client.placeholder				$color_unknown	$color_unknown	$color_unknown	$color_unknown		$color_unknown
+client.background					$color_unknown
 
 
-# Assign workspaces
-# workspace $ws-sx1 output $24tl
-# workspace $ws-sx2 output $24tl
-# workspace $ws-sx3 output $24tl
-# workspace $ws-mi1 output $24mi
-# workspace $ws-mi2 output $24mi
-# workspace $ws-mi3 output $24mi
-# workspace $ws-rx1 output $24tr
-# workspace $ws-rx2 output $24tr
-# workspace $ws-rx3 output $24tr
-
-### Keybindings
-## Define keys 
-set $leader Mod4
-set $shift Shift 
-set $ctrl Ctrl 
-set $altkey Mod1 
-set $esc Escape
-set $enter Return
+#######################################################
+## i3 - Global defined keybindings									 ##
+#######################################################
 
 ## Mouse
 floating_modifier $leader
+focus_follows_mouse no 
 
+## Allow moving between monitors
+force_focus_wrapping no
 
-## Move to the next output
-bindsym $leader+Left exec --no-startup-id "i3-msg 'focus output left'"
-bindsym $leader+Right exec  --no-startup-id "i3-msg 'focus output right'"
+# Don't move mouse on focus change
+mouse_warping none
 
 ## Change focus
 bindsym $leader+h focus left
@@ -81,22 +113,10 @@ bindsym $leader+k focus up
 bindsym $leader+l focus right
 
 ## Move windows around around
-bindsym $leader+$shift+h move left
-bindsym $leader+$shift+j move down
-bindsym $leader+$shift+k move up
-bindsym $leader+$shift+l move right
-
-## Enter Modals 
-bindsym $leader+e mode $edit 
-bindsym $leader+w mode $ws-manager
-bindsym $leader+r mode $launcher
-bindsym $leader+p mode $mediacontrol
-
-bindsym $leader+$esc mode $launcher-system 
-bindsym $leader+$shift+r mode $launcher-system 
-
-# Enter fullscreen
-bindsym $leader+f fullscreen toggle
+bindsym $leader+Shift+h move left
+bindsym $leader+Shift+j move down
+bindsym $leader+Shift+k move up
+bindsym $leader+Shift+l move right
 
 # Run program
 bindsym $leader+slash exec "rofi -modi drun,run -show drun"
@@ -104,61 +124,114 @@ bindsym $leader+slash exec "rofi -modi drun,run -show drun"
 # Show programs
 bindsym $leader+Tab exec rofi -show window
 
+# Enter fullscreen
+bindsym $leader+f fullscreen toggle
+
 # Toggle floating 
-bindsym $leader+$enter floating toggle
+bindsym $leader+Return floating toggle
 
 # Kill current focussed window
 bindsym $leader+q kill
-bindsym $altkey+F4 kill
+bindsym $keys_alt+F4 kill
+
+# Reload xrdb current profile
+set_from_resource $xrdbconfig	de.configuration $HOME/.config/xrdb/profile/desktop
 
 # Reload configuration
-bindsym $leader+grave reload
-bindsym $leader+$shift+grave restart
+bindsym $leader+grave exec --no-startup-id $HOME/.config/i3/sk/reload.sh reload
+bindsym $leader+Shift+grave exec --no-startup-id $HOME/.config/i3/sk/reload.sh restart 
 
 # Split vertical or horizontal 
 bindsym $leader+v split h
 bindsym $leader+s split v 
 
-# Switch to the workspace
-bindsym $leader+1 workspace 1
-bindsym $leader+2 workspace 10
-# bindsym $leader+2 workspace $ws-developer
-# bindsym $leader+3 workspace $ws-social
-# bindsym $leader+4 workspace $ws-browsing-2
-# bindsym $leader+5 workspace $ws-browsing-3
-#
-
-# Cycle between outputs 
-# TODO: Debug these
-# bindsym $leader+a exec i3-cycle next 
-# bindsym $leader+a focus output right 
-# bindsym $leader+$shift+bracketright focus output right 
-# bindsym $leader+bracketleft output prev 
-# bindsym $leader+bracketright output next 
-
-
-# Move workspace to the next or previous output 
-#bindsym $leader+$altkey+bracketleft move window to output prev, focus output prev 
-#bindsym $leader+$altkey+bracketright move window to output next, focus output next
-
-# move focused container to workspace
-# bindsym $leader+$shift+1 move container to workspace $ws-browsing-1
-# bindsym $leader+$shift+2 move container to workspace $ws-developer
-# bindsym $leader+$shift+3 move container to workspace $ws-social
-# bindsym $leader+$shift+4 move container to workspace $ws-browsing-2
-# bindsym $leader+$shift+5 move container to workspace $ws-browsing-3
-
-
-# Use pactl to adjust volume in PulseAudio.
+## Volume Control
+# Use pactl to adjust volume in PulseAudio
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ +5
 bindsym XF86AudioLowerVolume exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ -5
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
-### Modes
-## Edit window Size
-mode $edit {
+# Use keyboard
+bindsym $leader+equal exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ +4
+bindsym $leader+minus exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ -4
+
+# Cycle through workspace(s) on the current screen
+bindsym $leader+bracketleft workspace prev_on_output
+bindsym $leader+bracketright workspace next_on_output
+
+# TODO: Handle screenshots in i3
+
+
+#######################################################
+## i3 - Modes and modal keybindings									 ##
+#######################################################
+
+## Modes
+# Run binded applications
+bindsym $leader+r mode $mode_run
+mode $mode_run {
+		# Run explorer 
+		bindsym e exec $apps_fileExplorer, mode "default"
+
+		# Telegram 
+		bindsym t exec telegram-desktop, mode "default"
+
+		# Terminal
+		bindsym Return exec $apps_terminal, mode "default"
+		bindsym Shift+Return exec $apps_cwdTerminal, mode "default"
+
+		# Whatsapp 
+		bindsym w exec $apps_whatsapp, mode "default"
+
+		# Browser
+		bindsym b exec $apps_browser, mode "default"
+
+		# Browser in incognito 
+		bindsym Shift+b exec $apps_incognito, mode "default"
+
+		# Exit
+		bindsym Escape mode "default"
+	}
+ 
+# Media (music, youtube ...) control
+bindsym $leader+p mode $mode_media
+mode $mode_media {
+		# Player play-pause 
+		bindsym space exec playerctl play-pause 
+
+		# Player control
+		bindsym Right exec playerctl next
+		bindsym Left exec playerctl previous
+
+		# Volume Control
+		bindsym equal exec playerctl volume +5
+		bindsym minus exec playerctl volume -5
+
+		# Exit
+		bindsym Escape mode "default"
+	}
+
+# System commands
+bindsym $leader+$shift+r mode $mode_system
+mode $mode_system {
+		# Volume Control
+		bindsym equal exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ +4
+		bindsym minus exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ -4
+
+		# logout 
+		bindsym s exec "i3-nagbar -t warning -m 'Do you really want to shutdown the computer?' -B 'Yes' 'shutdown -h now'"
+		bindsym l exec "i3-nagbar -t warning -m 'Do you really want to logout?' -B 'Yes' 'i3-msg exit'"
+
+		bindsym Return mode "default"
+		bindsym Escape mode "default"
+		bindsym $leader+Escape mode "default"
+	}
+
+# Edit (resize 'n such)
+bindsym $leader+e mode $mode_edit
+mode $mode_edit {
 		# These bindings trigger as soon as you enter the resize mode
 
 		# Pressing left will shrink the window’s width.
@@ -177,97 +250,183 @@ mode $edit {
 		bindsym Right resize grow width 10 px or 10 ppt
 
 		# back to normal: Enter or Escape or $mod+r
-		bindsym $enter mode "default"
-		bindsym $esc mode "default"
-		bindsym $mod+r mode "default"
+		bindsym Return mode "default"
+		bindsym Escape mode "default"
 		bindsym $leader+e mode "default"
 	}
 
-## Run program
-mode $launcher {
-		# Editor in home directory
-		bindsym e exec $runeditor, mode "default"
 
-		# Music player
-		bindsym p exec $runmp, mode "default"
+#######################################################
+## i3 - Desktop specific settings										 ##
+#######################################################
+## i3 - Specific bindings        										 ##
+#######################################################
 
-		# Telegram 
-		bindsym t exec telegram-desktop, mode "default"
+## Move to the next output
+bindsym $leader+Left exec --no-startup-id "i3-msg 'focus output left'"
+bindsym $leader+Right exec  --no-startup-id "i3-msg 'focus output right'"
 
-		# Terminal
-		bindsym $enter exec $terminal, mode "default"
+## Move container to the next output (and keep focus)
+bindsym $leader+Shift+Left exec  --no-startup-id "i3-msg 'move container to output left; focus output left'"
+bindsym $leader+Shift+Right exec  --no-startup-id "i3-msg 'move container to output right; focus output right'"
 
-		# Browser
-		bindsym b exec $browser, mode "default"
+#######################################################
+## i3 - Workspaces and all        									 ##
+#######################################################
 
-		# Browser in incognito 
-		bindsym $shift+b exec $incognito, mode "default"
+## Modals
+set $eggwl sx
+set $eggwm cx
+set $eggwr dx
 
-		# Exit
-		bindsym $esc mode "default"
-	}
+bindsym $leader+1 mode $eggwl; exec --no-startup-id "$sk/brightness.sh $dimamount $output_tv_screen $output_sx_screen"
+bindsym $leader+2 mode $eggwm; exec --no-startup-id "$sk/brightness.sh $dimamount $output_tv_screen $output_cx_screen"
+bindsym $leader+3 mode $eggwr; exec --no-startup-id "$sk/brightness.sh $dimamount $output_tv_screen $output_dx_screen"
+
+## Left Monitor 
+workspace $workspace_social	 output $output_sx_screen
+workspace $workspace_media	 output $output_sx_screen
+workspace $workspace_focusi	 output $output_sx_screen
+
+assign [class="TelegramDesktop"] $workspace_social
+for_window [class="firefox" title="^WhatsApp — Mozilla Firefox$"] move to workspace $workspace_social
+assign [class="discord"] $workspace_media
+
+workspace $workspace_social	gaps top		$output_sx_gaps_top
+workspace $workspace_social	gaps left		$output_sx_gaps_left
+workspace $workspace_social	gaps right	$output_sx_gaps_right
+workspace $workspace_social	gaps bottom $output_sx_gaps_bottom
+
+workspace $workspace_media	gaps top		$output_sx_gaps_top
+workspace $workspace_media	gaps left		$output_sx_gaps_left
+workspace $workspace_media	gaps right	$output_sx_gaps_right
+workspace $workspace_media	gaps bottom $output_sx_gaps_bottom
+
+workspace $workspace_focusi	gaps top		$output_sx_gaps_top
+workspace $workspace_focusi	gaps left		$output_sx_gaps_left
+workspace $workspace_focusi	gaps right	$output_sx_gaps_right
+workspace $workspace_focusi	gaps bottom $output_sx_gaps_bottom
+
+## Central Monitor
+workspace $workspace_termi	 output $output_cx_screen
+workspace $workspace_termii	 output $output_cx_screen
+workspace $workspace_focusii output $output_cx_screen
+workspace $workspace_gaming	 output $output_cx_screen
+
+assign [class="gzdoom"] $workspace_gaming
+
+workspace $workspace_termi		gaps top		$output_cx_gaps_top
+workspace $workspace_termi		gaps left		$output_cx_gaps_left
+workspace $workspace_termi		gaps right	$output_cx_gaps_right
+workspace $workspace_termi		gaps bottom $output_cx_gaps_bottom
+
+workspace $workspace_termii		gaps top		$output_cx_gaps_top
+workspace $workspace_termii		gaps left		$output_cx_gaps_left
+workspace $workspace_termii		gaps right	$output_cx_gaps_right
+workspace $workspace_termii		gaps bottom $output_cx_gaps_bottom
+
+workspace $workspace_focusii	gaps top		$output_cx_gaps_top
+workspace $workspace_focusii	gaps left		$output_cx_gaps_left
+workspace $workspace_focusii	gaps right	$output_cx_gaps_right
+workspace $workspace_focusii	gaps bottom $output_cx_gaps_bottom
+
+workspace $workspace_gaming		gaps top		$output_cx_gaps_top
+workspace $workspace_gaming		gaps left		$output_cx_gaps_left
+workspace $workspace_gaming		gaps right	$output_cx_gaps_right
+workspace $workspace_gaming		gaps bottom $output_cx_gaps_bottom
+
+## Right Monitor
+workspace $workspace_nav	 output $output_dx_screen
+workspace $workspace_misc	 output $output_dx_screen
+workspace $workspace_setup output $output_dx_screen
+
+workspace $workspace_nav				gaps top		$output_dx_gaps_top
+workspace $workspace_nav				gaps left		$output_dx_gaps_left
+workspace $workspace_nav				gaps right	$output_dx_gaps_right
+workspace $workspace_nav				gaps bottom $output_dx_gaps_bottom
+
+workspace $workspace_misc		gaps top		$output_dx_gaps_top
+workspace $workspace_misc		gaps left		$output_dx_gaps_left
+workspace $workspace_misc		gaps right	$output_dx_gaps_right
+workspace $workspace_misc		gaps bottom $output_dx_gaps_bottom
+
+workspace $workspace_setup	gaps top		$output_dx_gaps_top
+workspace $workspace_setup	gaps left		$output_dx_gaps_left
+workspace $workspace_setup	gaps right	$output_dx_gaps_right
+workspace $workspace_setup	gaps bottom $output_dx_gaps_bottom
 
 
-## Media player control, requires mpDris2 for mpd
-mode $mediacontrol {
-		# Player play-pause 
-		bindsym space exec playerctl play-pause 
+#######################################################
+## i3 - Modals bindings           									 ##
+#######################################################
 
-		# Player control
-		bindsym Right exec playerctl next
-		bindsym Left exec playerctl previous
+# Left
+mode $eggwl {
+	bindsym 1 workspace $workspace_social; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 2 workspace $workspace_media; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 3 workspace $workspace_focusi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
 
-		# Volume Control
-		bindsym equal exec playerctl volume +5
-		bindsym minus exec playerctl volume -5
+	bindsym $leader+1 workspace $workspace_social; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+2 workspace $workspace_media; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+3 workspace $workspace_focusi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
 
-		# Exit
-		bindsym $esc mode "default"
-	}
+	bindsym Shift+1 move container to workspace $workspace_social; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+2 move container to workspace $workspace_media; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+3 move container to workspace $workspace_focus; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
 
-## System commands 
-mode $launcher-system {
-		# Volume Control
-		bindsym equal exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ +4
-		bindsym minus exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_SINK@ -4
-
-		# logout 
-		bindsym s exec "i3-nagbar -t warning -m 'Do you really want to shutdown the computer?' -B 'Yes' 'shutdown -h now'"
-		bindsym l exec "i3-nagbar -t warning -m 'Do you really want to logout?' -B 'Yes' 'i3-msg exit'"
-
-		bindsym $enter mode "default"
-		bindsym $esc mode "default"
-		bindsym $leader+$esc mode "default"
-	}
-
-## Start programs
-
-# Font for window titles. Will also be used by the bar unless a different font
-	# is used in the bar {} block below.
-font pango:monospace 8
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
-
-# Start XDG autostart .desktop files using dex. See also
-# https://wiki.archlinux.org/index.php/XDG_Autostart
-exec --no-startup-id dex --autostart --environment i3
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
-
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-
-# NetworkManager is the most popular way to manage wireless networks on Linux,
-# and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#
-bar {
-        status_command i3status
+	bindsym $leader+Shift+1 move container to workspace $workspace_social; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+2 move container to workspace $workspace_media; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+3 move container to workspace $workspace_focusi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	# Exit
+	bindsym Escape mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
 }
+
+# Center 
+mode $eggwm {
+	bindsym 1 workspace $workspace_termi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 2 workspace $workspace_termii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 3 workspace $workspace_focusii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 4 workspace $workspace_gaming; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+
+	bindsym $leader+1 workspace $workspace_termi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+2 workspace $workspace_termii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+3 workspace $workspace_focusii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+4 workspace $workspace_gaming; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+
+	bindsym Shift+1 move container to workspace $workspace_termi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+2 move container to workspace $workspace_termii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+3 move container to workspace $workspace_focusii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+4 move container to workspace $workspace_gaming; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	
+	bindsym $leader+Shift+1 move container to workspace $workspace_termi; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+2 move container to workspace $workspace_termii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+3 move container to workspace $workspace_focusii; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+4 move container to workspace $workspace_gaming; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+
+	# Exit
+	bindsym Escape mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+}
+
+
+# Right 
+mode $eggwr {
+	bindsym 1 workspace $workspace_nav; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 2 workspace $workspace_misc; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym 3 workspace $workspace_setup; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+
+	bindsym $leader+1 workspace $workspace_nav; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+2 workspace $workspace_misc; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+3 workspace $workspace_setup; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+
+	bindsym Shift+1 move container to workspace $workspace_nav; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+2 move container to workspace $workspace_misc; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym Shift+3 move container to workspace $workspace_setup; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	
+	bindsym $leader+Shift+1 move container to workspace $workspace_nav; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+2 move container to workspace $workspace_misc; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+	bindsym $leader+Shift+3 move container to workspace $workspace_setup; mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+
+	# Exit
+	bindsym Escape mode "default"; exec --no-startup-id "$sk/brightness.sh 1 $output_tv_screen"
+}
+
