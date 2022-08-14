@@ -32,7 +32,7 @@ DEFAULT.editor.notification_ratio		= 0.47			-- Notification width
 -------------------------------------
 DEFAULT.mason				= {}
 DEFAULT.mason.lsp		= { 'sumneko_lua', 'clangd' }
-DEFAULT.mason.tools	= { 'shellcheck', 'cpplint', 'luacheck' }
+DEFAULT.mason.tools	= { 'shellcheck' }
 
 -------------------------------------
 -- Directories configuration       --

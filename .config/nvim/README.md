@@ -7,6 +7,7 @@
 - Easy 'profile-based' customizability via the ./lua/setup/profile.lua file
 	- Plugins are the same, configuration may differ!
 - `Plug and Edit`: installation should be as easy as cloning this repo.
+- Reload-ready: bind `launch.sh` to system aliases, edit configuration, reload nvim with `:DDRestart` or `:DDKeep`
 - i3 centric configuration, thus meaning the configuration was written with tiling window managers in mind.
 
 ## Overview of plugins
@@ -25,12 +26,12 @@ Next, the lsp plugin list and a small description attached to them.
 and tools related to the LSP eco-system.
 - nvim-cmp, as the completion engine, which is superloaded with its own family of plugins and its own architecture, check it out! If I were to suggest an alternative, I'd suggest COQ, which is more like a bundle working out of the box (with the premise of being faster and the requirement of pre-compiling languages beforehand). 
 - LuaSnip, for snippets (integrated with nvim-cmp).
+- nvim-lint, for external linters which are not LSP-ready: shellcheck (for bash scripting) is one of them, for example.
 
 WIP: these are not configured yet, thus are set optional.
 - nvim-dap, for Debug Adapter(s). Tried to use it in the past, did not quite succeed. Will give it another run
 asap.
 - formatter, for formatters. I actually prefer to indent the code myself.
-- nvim-lint, for external linters which are not LSP-ready. Could not find a use case for now.
 
 ### GUIs
 Lots of GUIs plugins were added, here's a quick overview.

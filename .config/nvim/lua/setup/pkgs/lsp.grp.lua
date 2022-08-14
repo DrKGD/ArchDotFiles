@@ -50,6 +50,9 @@ return {
 					run_on_start = false
 				})
 
+			if UPDATEHOOK_GUARD then
+				vim.cmd([[MasonToolsUpdate]]) end
+
 			-- LSPSaga configuration
 			-- local saga = require('lspsaga')
 			-- saga.init_lsp_saga({
@@ -263,12 +266,15 @@ return {
 
 	-- ENHANCE: Not really found an use for it yet
 	{ "mfussenegger/nvim-lint",															-- Additional Linters
-		opt = true,
 		config = function()
 			require('lint').linters_by_ft = {
-
+				sh  = { 'shellcheck' }
 			}
 
+			vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+				callback = function()
+					require("lint").try_lint() end,
+			})
 		end },
 
 	{ "mhartington/formatter.nvim",													-- Formatters

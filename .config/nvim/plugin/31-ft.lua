@@ -6,7 +6,7 @@
 		local fts					= {
 			['*.cls']				= 'tex',
 			['*.i3.inc']		= 'i3config',
-			['.neoproj']	= 'lua'
+			['.neoproj']		= 'lua'
 		}
 
 		for custom, ft in pairs(fts) do

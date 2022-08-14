@@ -19,21 +19,21 @@ echo "Session file will be kept at <$PID_SESSION>!"
 echo "Removed files will be kept in <$PID_GARBAGE>!"
 echo "Now launching nvim..."
 
-nvim $@
+nvim "$@"
 EXCODE=$?
 
 ## Run neovim until exit code is not $SIGKEEP
 while [ $EXCODE -eq $SIGKEEP ] || [ $EXCODE -eq $SIGDISCARD ]; do
 	case $EXCODE in
 		# Restart nvim, thus keeping the session (if file exists)
-		$SIGKEEP)
+		"$SIGKEEP")
 			echo "Restarting (keep) nvim..."
-			nvim -S "$PID_SESSION" $@
+			nvim -S "$PID_SESSION" "$@"
 			;;
 
-		$SIGDISCARD)
+		"$SIGDISCARD")
 			echo "Restarting (clean) nvim..."
-			nvim $@
+			nvim "$@"
 			;;
 	esac
 
