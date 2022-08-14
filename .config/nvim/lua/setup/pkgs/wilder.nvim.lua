@@ -42,7 +42,8 @@ return { "gelguy/wilder.nvim",
 		)
 
 		local wildmenu_renderer = w.wildmenu_renderer({
-			highlighter = hi
+			highlighter = hi,
+			highlights = colors
 		})
 
 

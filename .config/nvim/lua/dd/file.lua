@@ -12,9 +12,13 @@ local separator = (function()
 	return nil
 end)()
 
-local input_prompt = function(msg, lambda)
-	vim.ui.input({ prompt = msg,
-		completion = 'dir'},
+local relative_to_current_file = function()
+	return '.' ..  separator .. vim.fn.fnamemodify(vim.fn.expand('%:h'), ':p:~:.') end 
+
+local input_prompt = function(msg, completion, lambda)
+	vim.ui.input({ default = relative_to_current_file(),
+		prompt = msg,
+		completion = completion},
 		lambda )
 end
 
@@ -83,6 +87,9 @@ end
 
 -- Move file
 M.mv		=	function(src, dest)
+	-- As it uses external commands, we need the full path
+	dest = vim.fn.fnamemodify(dest, ':p')
+
 	-- Check if file exists
 	if not path.fileExists(src) then
 		n.error("Source file <%s> does not exist, operation aborted!", src) return end
@@ -93,6 +100,7 @@ M.mv		=	function(src, dest)
 	local parent = path.dirParent(dest)
 	if not path.dirExists(parent) then
 		n.error("Parent folder for destination <%s> does not exist, operation aborted!", parent) return end
+
 
 	-- If any window had this file open, we will switch to a temporary empty buffer
 	local id = vim.fn.bufnr(vim.fn.fnamemodify(src, ':p'))
@@ -106,14 +114,14 @@ M.mv		=	function(src, dest)
 	end
 
 	-- Move, load buffer, and re-switch everything back to it
-	vim.cmd(string.format([[silent! mv "%s" "%s"]], src, dest))
+	vim.cmd(string.format([[silent !mv "%s" "%s"]], src, dest))
 	vim.cmd(string.format([[silent! badd %s]], dest))
 	local newId = vim.fn.bufnr(vim.fn.fnamemodify(dest, ':p'))
 	for w, _ in pairs(matches) do
 		vim.api.nvim_win_set_buf(w, newId)
 	end
 
-	-- Wipe temp from memory
+	-- -- Wipe temp from memory
 	if b then require('bufdelete').bufwipeout(b) end
 	n.info("File <%s> moved to <%s> with success!", src, dest)
 end
@@ -203,15 +211,15 @@ M.save	= function()
 end
 
 M.setup = function()
-	local prompt_or_run = function(p, title, run)
+	local prompt_or_run = function(p, title, comp, run)
 		if p.args ~= '' then run(p.args)
-		else input_prompt(title, run) end
+		else input_prompt(title, comp, run) end
 	end
 
 	vim.api.nvim_create_user_command('DDSave', M.save, {})
 	vim.api.nvim_create_user_command('DDReloadDocument', M.reload, {})
 	vim.api.nvim_create_user_command('DDNew', function(p)
-		prompt_or_run(p, 'New (file/directory)', function(input)
+		prompt_or_run(p, 'New (file/directory)', 'dir', function(input)
 			if vim.fn.empty(input) == 1 then
 				n.info("New file operation aborted!") return end
 
@@ -227,7 +235,7 @@ M.setup = function()
 		if vim.fn.empty(src) == 2 then
 			n.error("[No Name] buffer was selected!") return end
 
-		prompt_or_run(p, string.format("Copy <%s>", src), function(input)
+		prompt_or_run(p, string.format("Copy <%s> to", src), 'dir', function(input)
 			if vim.fn.empty(input) == 1 then
 				n.info("Copy operation aborted") return end
 			M.cp(src, input)
@@ -239,7 +247,7 @@ M.setup = function()
 		if vim.fn.empty(src) == 2 then
 			n.error("[No Name] buffer was selected!") return end
 
-		prompt_or_run(p, string.format("Move <%s>", src), function(input)
+		prompt_or_run(p, string.format("Move <%s> to", src), 'dir', function(input)
 			if vim.fn.empty(input) == 1 then
 				n.info("Move operation aborted") return end
 			M.mv(src, input)
@@ -248,7 +256,7 @@ M.setup = function()
 
 
 	vim.api.nvim_create_user_command('DDDelete', function(p)
-		prompt_or_run(p, 'Delete', function(input)
+		prompt_or_run(p, 'Delete', 'file', function(input)
 			if vim.fn.empty(input) == 1 then
 				n.info("Delete operation aborted!") return end
 

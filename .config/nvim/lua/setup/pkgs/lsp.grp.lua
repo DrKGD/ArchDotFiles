@@ -54,20 +54,11 @@ return {
 				vim.cmd([[MasonToolsUpdate]]) end
 
 			-- LSPSaga configuration
-			-- local saga = require('lspsaga')
-			-- saga.init_lsp_saga({
-			-- 	saga_winblend = 30,
-			-- 	move_in_saga = { prev = '<C-e>', next = '<C-d>' },
-   --
-			-- 	code_action_icon = '💡',
-			-- 	code_action_lightbulb = {
-			-- 		enable = true,
-			-- 		sign = false,
-			-- 		enable_in_insert = true,
-			-- 		virtual_text = true
-			-- 	}
-   --
-			-- })
+			local saga = require('lspsaga')
+			saga.init_lsp_saga({
+				saga_winblend = 30,
+				move_in_saga = { prev = '<C-e>', next = '<C-d>' },
+			})
 
 			-- Navic for treesitter nodes
 			local navic = require('nvim-navic')
@@ -128,14 +119,17 @@ return {
 			local fn	= require('util.generic').fn
 			local cmd = require('util.generic').cmd
 			local attach		= function(client, bufnr)
-			local a= " this is a string:?"
-				-- ('n', '<space>a', vim.lsp.buf.code_action, bufopts)
 				m.group("silent", { buffer = bufnr }, function()
-					-- m.nmap('<space>a', cmd 'Lspsaga code_action')
-					-- m.nmap('K', cmd 'Lspsaga hover_doc')
-					-- m.nmap('gr', cmd 'Lspsaga rename')
-					-- m.nmap('gh', cmd 'Lspsaga rename')
-
+					m.nmap('<space>a', cmd 'Lspsaga code_action')
+					m.vmap('<space>a', cmd 'Lspsaga range_code_action')
+					m.nmap('<space>p', cmd 'Lspsaga diagnostic_jump_prev')
+					m.nmap('<space>n', cmd 'Lspsaga diagnostic_jump_next')
+					m.nmap('<space>d', cmd 'Lspsaga show_line_diagnostics')
+					m.nmap('<space>D', cmd 'Lspsaga preview_definition')
+					m.nmap('<space>K', cmd 'Lspsaga hover_doc')
+					m.nmap('<space>h', cmd 'Lspsaga signature_help')
+					m.nmap('<space>R', cmd 'Lspsaga rename')
+					m.nmap('<space>f', cmd 'Lspsaga lsp_finder')
 				end)
 
 				navic.attach(client, bufnr)
@@ -144,16 +138,6 @@ return {
 			-- Setup completion engine
 			local cmp		= require('cmp')
 			local snip  = require('luasnip')
-
-			local has_words_before = function()
-				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-				return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-			end
-
-			local prev_is_whitespace = function()
-				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-				return col ~= 0 or vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s")
-			end
 
 			-- Configure cmp
 			cmp.setup({

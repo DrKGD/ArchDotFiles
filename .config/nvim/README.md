@@ -27,6 +27,7 @@ and tools related to the LSP eco-system.
 - nvim-cmp, as the completion engine, which is superloaded with its own family of plugins and its own architecture, check it out! If I were to suggest an alternative, I'd suggest COQ, which is more like a bundle working out of the box (with the premise of being faster and the requirement of pre-compiling languages beforehand). 
 - LuaSnip, for snippets (integrated with nvim-cmp).
 - nvim-lint, for external linters which are not LSP-ready: shellcheck (for bash scripting) is one of them, for example.
+- Lspsaga, deep into the code.
 
 WIP: these are not configured yet, thus are set optional.
 - nvim-dap, for Debug Adapter(s). Tried to use it in the past, did not quite succeed. Will give it another run

@@ -1,9 +1,6 @@
-- Fix paste 
 - Heirline, add diagnostics and git
 - Nvim Layout manager (save win layout, cycle between saved layouts)
 - Finish with SnipRun (setup hi)
-- Finish with Wilder (other modes /, ?)
-- Either change NERDTree key or lower the timeout time
 - Prompt should be now adapted to the new style (vim.ui)
 - Setup a tabline
-- BUG: ml_get
+
