@@ -13,6 +13,6 @@ xrdb -merge "$HOME/.config/xrdb/profile/desktop"
 # ratbagctl 'Logitech G733 Gaming Headset' led 0 set mode on color 179AFF
 # ratbagctl 'Logitech G733 Gaming Headset' led 1 set mode on color FF9507 
 
-# Run awesome
+# Run i3 
 exec i3 
 
