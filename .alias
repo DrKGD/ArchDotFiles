@@ -91,5 +91,8 @@ alias remount='sudo systemctl daemon-reload && sudo mount -a && findmnt'
 # Testbench
 alias testbench=$HOME/Projects/testbench/
 
+# Clock
+alias clock='tty-clock'
+
 
 

@@ -3,8 +3,8 @@
 #######################################################
 
 set $border_size 3
-set $gap_outer 10
-set $gap_inner 8
+set $gap_outer 3 
+set $gap_inner 5
 
 ## Gaps, Borders
 for_window [class=".*"] border pixel $border_size 

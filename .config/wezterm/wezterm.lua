@@ -38,6 +38,8 @@ local PROFILE = (function()
 	}
 
 	local handle = io.popen("cat /etc/hostname | tr -d '\n'")
+
+	if not handle then return end 
 	local result = handle:read("*a")
 	handle:close()
 
@@ -200,11 +202,6 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
     {Background={Color=color}},
 		{Text = title}
 	}
-end)
-
--- TRAP: Can't implement that yet
-wezterm.on("send-through-nvim", function(window, pane)
-
 end)
 
 local function font_fb(font)
@@ -459,53 +456,6 @@ return {
 		{ key = 'phys:4', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-4"}},
 		{ key = 'phys:5', mods = "LEADER", action = wezterm.action { EmitEvent = "load-state-5"}},
 		{ key = '`', mods = "LEADER", action = wezterm.action { EmitEvent = "revert-cwd"}},
-
-		
-
-
-
-		-- DISABLED: not really a use for these in i3
-		-- Show launcher with custom flags
-		-- {key = 'Enter', mods="LEADER", action = "ShowLauncher"},
-		-- {key = 'Enter', mods="LEADER", action = wezterm.action { ShowLauncherArgs=
-		-- 	{ flags='FUZZY|DOMAINS|LAUNCH_MENU_ITEMS' }}},
-		--
-		-- --- Navigation between tabs
-		-- -- Navigate or search for a specific tab
-		-- { key = '/', mods = "LEADER", action = "ShowTabNavigator"},
-		--
-		-- -- Spawn tab
-		-- { key = 'n', mods = 'LEADER', action = wezterm.action { SpawnTab="CurrentPaneDomain"}},
-		-- { key = 'n', mods = 'CTRL|LEADER', action = wezterm.action { SpawnTab="DefaultDomain"}},
-		--
-		-- -- Next or Previous tab
-		-- { key = 'a', mods = "LEADER", action = wezterm.action { ActivateTabRelative=-1 }},
-		-- { key = 'f', mods = "LEADER", action = wezterm.action { ActivateTabRelative=1 }},
-		-- { key = 'q', mods = "LEADER", action = wezterm.action { ActivateTabRelative=-1 }},
-		-- { key = 'e', mods = "LEADER", action = wezterm.action { ActivateTabRelative=1 }},
-		--- Panes navigation
-		-- Open panes and close pane
-		-- { key = 's', mods = "LEADER", action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain"}}},
-		-- { key = 'v', mods = "LEADER", action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain"}}},
-		-- { key = "q", mods = "LEADER|SHIFT", action = wezterm.action { CloseCurrentPane = { confirm = false }}},
-		-- { key = 'z', mods = "LEADER", action = "TogglePaneZoomState" },
-
-		-- Move between panes with ease
-		-- {key = "RightArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Right"}},
-		-- {key = "LeftArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Left"}},
-		-- {key = "UpArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Up"}},
-		-- {key = "DownArrow", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Down"}},
-
-		-- {key = "l", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Right"}},
-		-- {key = "h", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Left"}},
-		-- {key = "k", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Up"}},
-		-- {key = "j", mods = "ALT", action = wezterm.action {ActivatePaneDirection = "Down"}},
-
-		-- Resize pane
-		-- {key = "RightArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Right", 5}}},
-		-- {key = "LeftArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Left", 5}}},
-		-- {key = "UpArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Up", 5}}},
-		-- {key = "DownArrow", mods = "ALT|SHIFT", action = wezterm.action {AdjustPaneSize = {"Down", 5}}},
 	}
 }
 

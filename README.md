@@ -1,7 +1,5 @@
 # Deatharte .dotfiles
 
-## Versioning
-
 ## Manual steps 
 The following was written following this [https://www.atlassian.com/git/tutorials/dotfiles](guide).
 ```bash
@@ -21,11 +19,11 @@ The following was written following this [https://www.atlassian.com/git/tutorial
 
 ## TODO(s)
 - [ ] Application config(s)
-	- [ ] Editor (nvim)
+	- [x] Editor (nvim)
 	- [ ] Terminal (wezterm)
 	- [ ] PDF Viewer (sioyek)
-	- [ ] Screen Compositor (picom)
-	- [ ] Status line (polybar)
+	- [x] Screen Compositor (picom)
+	- [x] Status line (polybar)
 	- [ ] Greater (ssdm)
 	- [x] DE (i3)
 		- [x] Keybindings

@@ -91,7 +91,10 @@ return {
 
 	{ "rebelot/heirline.nvim",													-- Statusline
 		config = function()
-			require('heirline').setup(unpack(require('plug.heirline')))
+			local sl, wb = unpack(require('plug.heirline'))
+			require("heirline").setup(sl)--, WinBar)
+			require("heirline").winbar = require("heirline.statusline"):new(wb)
+			vim.opt.winbar = "%{%v:lua.require'heirline'.eval_winbar()%}"
 		end },
 
 	{ "brenoprata10/nvim-highlight-colors",							-- Color highlight

@@ -28,6 +28,10 @@
 !.config/wezterm/
 !.config/wezterm/*
 
+# polybar
+!.config/polybar/
+!.config/polybar/*
+
 # sioyek
 !.config/sioyek/
 !.config/sioyek/*

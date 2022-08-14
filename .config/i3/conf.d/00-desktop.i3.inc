@@ -5,20 +5,20 @@
 #######################################################
 set $dimamount 0.35
 set $output_sx_screen DP-1
-set $output_sx_gaps_top 5
-set $output_sx_gaps_left 5
-set $output_sx_gaps_right 5
-set $output_sx_gaps_bottom 25
+set $output_sx_gaps_top 0
+set $output_sx_gaps_left 0
+set $output_sx_gaps_right 0
+set $output_sx_gaps_bottom 0
 set $output_cx_screen DVI-I-1
-set $output_cx_gaps_top 30
-set $output_cx_gaps_left 5
-set $output_cx_gaps_right 5
-set $output_cx_gaps_bottom 28
+set $output_cx_gaps_top 0 
+set $output_cx_gaps_left 0
+set $output_cx_gaps_right 0
+set $output_cx_gaps_bottom 0 
 set $output_dx_screen HDMI-0
-set $output_dx_gaps_top 5
-set $output_dx_gaps_left 5
-set $output_dx_gaps_right 5
-set $output_dx_gaps_bottom 25
+set $output_dx_gaps_top 0
+set $output_dx_gaps_left 0
+set $output_dx_gaps_right 0
+set $output_dx_gaps_bottom 0 
 set $output_tv_screen DVI-D-0
 
 #######################################################
