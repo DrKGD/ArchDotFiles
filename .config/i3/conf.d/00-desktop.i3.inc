@@ -5,20 +5,8 @@
 #######################################################
 set $dimamount 0.35
 set $output_sx_screen DP-1
-set $output_sx_gaps_top 0
-set $output_sx_gaps_left 0
-set $output_sx_gaps_right 0
-set $output_sx_gaps_bottom 0
 set $output_cx_screen DVI-I-1
-set $output_cx_gaps_top 0 
-set $output_cx_gaps_left 0
-set $output_cx_gaps_right 0
-set $output_cx_gaps_bottom 0 
 set $output_dx_screen HDMI-0
-set $output_dx_gaps_top 0
-set $output_dx_gaps_left 0
-set $output_dx_gaps_right 0
-set $output_dx_gaps_bottom 0 
 set $output_tv_screen DVI-D-0
 
 #######################################################
@@ -51,73 +39,16 @@ workspace $workspace_social	 output $output_sx_screen
 workspace $workspace_media	 output $output_sx_screen
 workspace $workspace_focusi	 output $output_sx_screen
 
-assign [class="TelegramDesktop"] $workspace_social
-for_window [class="firefox" title="^WhatsApp — Mozilla Firefox$"] move to workspace $workspace_social
-assign [class="discord"] $workspace_media
-
-workspace $workspace_social	gaps top		$output_sx_gaps_top
-workspace $workspace_social	gaps left		$output_sx_gaps_left
-workspace $workspace_social	gaps right	$output_sx_gaps_right
-workspace $workspace_social	gaps bottom $output_sx_gaps_bottom
-
-workspace $workspace_media	gaps top		$output_sx_gaps_top
-workspace $workspace_media	gaps left		$output_sx_gaps_left
-workspace $workspace_media	gaps right	$output_sx_gaps_right
-workspace $workspace_media	gaps bottom $output_sx_gaps_bottom
-
-workspace $workspace_focusi	gaps top		$output_sx_gaps_top
-workspace $workspace_focusi	gaps left		$output_sx_gaps_left
-workspace $workspace_focusi	gaps right	$output_sx_gaps_right
-workspace $workspace_focusi	gaps bottom $output_sx_gaps_bottom
-
 ## Central Monitor
 workspace $workspace_termi	 output $output_cx_screen
 workspace $workspace_termii	 output $output_cx_screen
 workspace $workspace_focusii output $output_cx_screen
 workspace $workspace_gaming	 output $output_cx_screen
 
-assign [class="gzdoom"] $workspace_gaming
-
-workspace $workspace_termi		gaps top		$output_cx_gaps_top
-workspace $workspace_termi		gaps left		$output_cx_gaps_left
-workspace $workspace_termi		gaps right	$output_cx_gaps_right
-workspace $workspace_termi		gaps bottom $output_cx_gaps_bottom
-
-workspace $workspace_termii		gaps top		$output_cx_gaps_top
-workspace $workspace_termii		gaps left		$output_cx_gaps_left
-workspace $workspace_termii		gaps right	$output_cx_gaps_right
-workspace $workspace_termii		gaps bottom $output_cx_gaps_bottom
-
-workspace $workspace_focusii	gaps top		$output_cx_gaps_top
-workspace $workspace_focusii	gaps left		$output_cx_gaps_left
-workspace $workspace_focusii	gaps right	$output_cx_gaps_right
-workspace $workspace_focusii	gaps bottom $output_cx_gaps_bottom
-
-workspace $workspace_gaming		gaps top		$output_cx_gaps_top
-workspace $workspace_gaming		gaps left		$output_cx_gaps_left
-workspace $workspace_gaming		gaps right	$output_cx_gaps_right
-workspace $workspace_gaming		gaps bottom $output_cx_gaps_bottom
-
 ## Right Monitor
 workspace $workspace_nav	 output $output_dx_screen
 workspace $workspace_misc	 output $output_dx_screen
 workspace $workspace_setup output $output_dx_screen
-
-workspace $workspace_nav				gaps top		$output_dx_gaps_top
-workspace $workspace_nav				gaps left		$output_dx_gaps_left
-workspace $workspace_nav				gaps right	$output_dx_gaps_right
-workspace $workspace_nav				gaps bottom $output_dx_gaps_bottom
-
-workspace $workspace_misc		gaps top		$output_dx_gaps_top
-workspace $workspace_misc		gaps left		$output_dx_gaps_left
-workspace $workspace_misc		gaps right	$output_dx_gaps_right
-workspace $workspace_misc		gaps bottom $output_dx_gaps_bottom
-
-workspace $workspace_setup	gaps top		$output_dx_gaps_top
-workspace $workspace_setup	gaps left		$output_dx_gaps_left
-workspace $workspace_setup	gaps right	$output_dx_gaps_right
-workspace $workspace_setup	gaps bottom $output_dx_gaps_bottom
-
 
 #######################################################
 ## i3 - Modals bindings           									 ##

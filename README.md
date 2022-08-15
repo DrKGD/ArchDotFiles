@@ -355,6 +355,7 @@ makepkg -si
 	- blueman			as a gui bluetooth manager
 	- lxappearance to configure themes.
 	- telegram (aur), alttab-git, gzdoom
+	- qbittorrent
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \

@@ -26,3 +26,4 @@ include ./conf.d/10-keybindings.i3.inc
 include ./conf.d/20-modals.i3.inc
 include ./conf.d/30-visual.i3.inc
 include ./conf.d/40-exec.i3.inc
+include ./conf.d/50-assign.i3.inc
