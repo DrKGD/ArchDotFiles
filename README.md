@@ -399,11 +399,7 @@ makepkg -si
 	
 	- lxappearance
 	Handle themes for qt4/gtk oriented applications
-	At the moment [Dracula](https://www.xfce-look.org/p/1687249) is the theme I am using.
-	Note: every change requires an sddm reload (`sudo systemctl sddm restart`).
-	```bash
-		lxappearance
-	```
+	Note: To update current theme you are required to restart sddm (`sudo systemctl sddm restart`).
 
 	- gzdoom
 	```bash
