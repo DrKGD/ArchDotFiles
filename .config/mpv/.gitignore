@@ -1,2 +1,4 @@
 # Allow everything
-!*
+!mpv.conf
+!shaders/
+!shaders/*
