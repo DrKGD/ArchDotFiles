@@ -10,6 +10,10 @@
 !.path
 !README.md
 
+## Keep themes
+!.themes/
+!.themes/*
+
 ## Allow these configuration folders 
 !.config/ 
 
@@ -52,3 +56,4 @@
 # gzdoom
 !.config/gzdoom/
 !.config/gzdoom/*
+

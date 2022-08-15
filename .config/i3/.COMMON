@@ -5,4 +5,3 @@ xset r rate 350 50
 ## Environment variables
 # Export WM
 export i3WM=1
-export QT_QPA_PLATFORMTHEME='qt5ct'

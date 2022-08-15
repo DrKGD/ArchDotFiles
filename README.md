@@ -344,20 +344,21 @@ makepkg -si
 	- ncmpcpp 		as audio client
 	- mpv					as video player
 	- picom   		as compositor
-	- dmenu				as launcher
+	- dmenu, rofi	as launcher
 	- polybar			as status
 	- neofetch		as rice memer
 	- xwallpaper	to set wallpapers
 	- shutter			to take screenshots
-	- [missing]		as file browser 
+	- thunar    	as file browser 
 	- rg, fd			as file finder and grep finder
 	- zsh         as shell
+	- lxappearance to configure themes.
 	- telegram (aur), alttab-git, gzdoom			
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
-		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper shutter ripgrep fd zsh \
-		telegram-desktop-userfonts alttab-git
+		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper thunar shutter ripgrep fd zsh rofi \
+		telegram-desktop-userfonts alttab-git lxappearance
 	```
 
 - Fonts (required fonts)
@@ -394,6 +395,14 @@ makepkg -si
 
 	# install powerlevel through aur
 	paru -S zsh-theme-powerlevel10k-git
+	```
+	
+	- lxappearance
+	Handle themes for qt4/gtk oriented applications
+	At the moment [Dracula](https://www.xfce-look.org/p/1687249) is the theme I am using.
+	Note: every change requires an sddm reload (`sudo systemctl sddm restart`).
+	```bash
+		lxappearance
 	```
 
 	- gzdoom
