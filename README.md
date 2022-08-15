@@ -265,17 +265,22 @@ Run `mkinitcpio -p linux`
 # fdrive/archive		ntfs-3g long term, local storage
 # nas								network storage
 # ram								ram drive
-mkdir /mnt/fdrive
-mkdir /mnt/nas
 mkdir /mnt/ram
+mkdir /mnt/nas
+mkdir /mnt/fdrive
 
-# Add NAS credentials in /root/.smbcredentials
-username=[user]
-password=[pass]
-
-# Then add the following lines into `/etc/fstab`
+Then add the following lines into `/etc/fstab`
 # RAM Disk
 tmpfs		/mnt/ram		tmpfs			nosuid,nodev,noatime,size=1g,mode=1777,rw			0 0
+
+# Archive  
+get uuid with lsblk -f then
+UUID=[UUID] /mnt/fdrive ntfs-3g		rw,auto,users,exec,nls=utf8,umask=003,gid=46,uid=1000	0	0
+
+# NAS
+# Credentials in /root/.smbcredentials
+username=[user]
+password=[pass]
 
 # Remount everything with
 sudo mount -a
@@ -340,6 +345,7 @@ makepkg -si
 	- mpv					as video player
 	- picom   		as compositor
 	- dmenu				as launcher
+	- polybar			as status
 	- neofetch		as rice memer
 	- xwallpaper	to set wallpapers
 	- shutter			to take screenshots
@@ -349,7 +355,14 @@ makepkg -si
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
-		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu neofetch xwallpaper shutter ripgrep fd zsh
+		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper shutter ripgrep fd zsh
+	```
+
+- Fonts (required fonts)
+	```bash
+		paru -S ttf-scientifica nerd-fonts-complete 
+
+
 	```
 
 - Additional packages in other package managers, required for the system 
@@ -359,6 +372,12 @@ makepkg -si
 	python -m pip install --user --upgrade pynvim
 	```
 
+	- i3, sddm
+	Configure sddm to use custom script to launch i3 instead, `/usr/share/xsessions/i3.desktop`
+	```bash
+	Exec=/bin/sh -c "$HOME/.config/i3/.$HOSTNAME"
+	```
+
 	- wezterm
 	```bash
 	# install ohmyzsh
@@ -366,8 +385,5 @@ makepkg -si
 
 	# install powerlevel through aur
 	paru -S zsh-theme-powerlevel10k-git
-
-	# install fonts
-		ttf-scientifica
 	```
 
