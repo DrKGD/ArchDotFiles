@@ -16,16 +16,16 @@ workspace $workspace_misc output $output
 workspace $workspace_setup output $output
 workspace $workspace_gaming output $output
 
-bindsym $leader+1 $workspace_termi
-bindsym $leader+2 $workspace_nav
-bindsym $leader+3 $workspace_social
-bindsym $leader+4 $workspace_media
-bindsym $leader+5 $workspace_termii
-bindsym $leader+6 $workspace_focusi
-bindsym $leader+7 $workspace_focusii
-bindsym $leader+8 $workspace_misc
-bindsym $leader+9 $workspace_setup
-bindsym $leader+0 $workspace_gaming
+bindsym $leader+1 workspace $workspace_termi
+bindsym $leader+2 workspace $workspace_nav
+bindsym $leader+3 workspace $workspace_social
+bindsym $leader+4 workspace $workspace_media
+bindsym $leader+5 workspace $workspace_termii
+bindsym $leader+6 workspace $workspace_focusi
+bindsym $leader+7 workspace $workspace_focusii
+bindsym $leader+8 workspace $workspace_misc
+bindsym $leader+9 workspace $workspace_setup
+bindsym $leader+0 workspace $workspace_gaming
 
 bindsym $leader+Shift+1 move container to workspace $workspace_termi
 bindsym $leader+Shift+2 move container to workspace $workspace_nav
