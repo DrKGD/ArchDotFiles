@@ -10,9 +10,11 @@
 !.path
 !README.md
 
-## Keep themes
+## Keep themes and icons
 !.themes/
 !.themes/*
+!.icons/
+!.icons/*
 
 ## Allow these configuration folders 
 !.config/ 
