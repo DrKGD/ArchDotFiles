@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>org.wezfurlong.wezterm</icon>
+	<name>Open Terminal Here</name>
+	<unique-id>1660586095229395-1</unique-id>
+	<command>wezterm start --cwd %f</command>
+	<description>Example for a custom action</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>nvim</icon>
+	<name>Open nvim in terminal</name>
+	<unique-id>1660596655230382-1</unique-id>
+	<command>wezterm start --always-new-process --cwd %d -- nvim %F</command>
+	<description>Edit with nvim</description>
+	<patterns>*</patterns>
+	<other-files/>
+	<text-files/>
+</action>
+<action>
+	<icon>redeyes</icon>
+	<name>Open in image viewer</name>
+	<unique-id>1660597007362160-2</unique-id>
+	<command>meh %F</command>
+	<description>Open in image viewer</description>
+	<patterns>*</patterns>
+	<image-files/>
+</action>
+<action>
+	<icon>kdenlive-hide-video</icon>
+	<name>Open file with mpv</name>
+	<unique-id>1660598199679718-1</unique-id>
+	<command>mpv %f --profile=M60</command>
+	<description>Open file with mpv</description>
+	<patterns>*</patterns>
+	<video-files/>
+</action>
+</actions>

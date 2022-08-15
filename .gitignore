@@ -59,3 +59,11 @@
 !.config/gzdoom/
 !.config/gzdoom/*
 
+# thunar shortcuts
+!.config/Thunar/
+!.config/Thunar/uca.xml
+
+# mpv
+!.config/mpv/
+!.config/mpv/*
+

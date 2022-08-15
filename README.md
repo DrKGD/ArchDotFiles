@@ -349,16 +349,16 @@ makepkg -si
 	- neofetch		as rice memer
 	- xwallpaper	to set wallpapers
 	- shutter			to take screenshots
-	- thunar    	as file browser 
+	- thunar    	as file browser, also requires `gvfs`, `gvfs-smb` 
 	- rg, fd			as file finder and grep finder
 	- zsh         as shell
 	- blueman			as a gui bluetooth manager
 	- lxappearance to configure themes.
-	- telegram (aur), alttab-git, gzdoom			
+	- telegram (aur), alttab-git, gzdoom
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
-		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper thunar shutter ripgrep fd zsh rofi \
+		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper thunar gvfs gvfs-smb shutter ripgrep fd zsh rofi \
 		telegram-desktop-userfonts alttab-git lxappearance
 	```
 
@@ -404,4 +404,18 @@ makepkg -si
 
 	- gzdoom
 	Get [WADS](https://archive.org/details/2020_03_22_DOOM) from here.
+
+	- github
+	Configure a key for github
+	```bash
+	ssh-keygen -b 2048 -t rsa
+	```
+
+	Then copy `id_rsa.pub` content in [github](www.github.com/settings.keys).
+
+	Finally, configure machine git globals
+	```bash
+
+
+	```
 
