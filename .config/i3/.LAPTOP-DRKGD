@@ -1,10 +1,11 @@
 #!/bin/bash
 
 export readonly PROFILE='laptop'
+export readonly MOUNTPOINT='/mnt/ram'
 
 # Import ./.COMMON
 source "$HOME/.config/i3/.COMMON"
 
-# Run awesome
+# Run i3 
 exec i3 
 
