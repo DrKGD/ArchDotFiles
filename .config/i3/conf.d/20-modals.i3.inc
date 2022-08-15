@@ -6,7 +6,7 @@ set $apps_incognito firefox --private-window --
 set $apps_terminal wezterm
 set $apps_cwdTerminal wezterm start --cwd $(cat $MOUNTPOINT/cwd)
 set $apps_editor vscode
-set $apps_fileExplorer dolphin
+set $apps_fileExplorer thunar 
 set $apps_whatsapp firefox --new-window https://web.whatsapp.com
 
 set $mode_run run

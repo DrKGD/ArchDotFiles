@@ -352,6 +352,7 @@ makepkg -si
 	- thunar    	as file browser 
 	- rg, fd			as file finder and grep finder
 	- zsh         as shell
+	- blueman			as a gui bluetooth manager
 	- lxappearance to configure themes.
 	- telegram (aur), alttab-git, gzdoom			
 
@@ -402,8 +403,5 @@ makepkg -si
 	Note: To update current theme you are required to restart sddm (`sudo systemctl sddm restart`).
 
 	- gzdoom
-	```bash
-
-	```
-	**TODO**
+	Get [WADS](https://archive.org/details/2020_03_22_DOOM) from here.
 
