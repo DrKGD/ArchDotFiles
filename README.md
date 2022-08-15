@@ -345,16 +345,29 @@ makepkg -si
 	- shutter			to take screenshots
 	- [missing]		as file browser 
 	- rg, fd			as file finder and grep finder
+	- zsh         as shell
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
-		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu neofetch xwallpaper shutter ripgrep fd
+		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu neofetch xwallpaper shutter ripgrep fd zsh
 	```
 
 - Additional packages in other package managers, required for the system 
 	- nvim 
 	```bash
-		# python support
-		python -m pip install --user --upgrade pynvim
+	# python support
+	python -m pip install --user --upgrade pynvim
+	```
+
+	- wezterm
+	```bash
+	# install ohmyzsh
+	sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+	# install powerlevel through aur
+	paru -S zsh-theme-powerlevel10k-git
+
+	# install fonts
+		ttf-scientifica
 	```
 
