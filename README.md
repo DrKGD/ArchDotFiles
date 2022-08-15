@@ -142,6 +142,7 @@ ln -sf /usr/share/zoneinfo/Europe/Rome /etc/localtime
 
 ## Set hwclock
 hwclock --systohc
+timedatectl set-ntp true
 ```
 
 - Locale
@@ -361,6 +362,8 @@ makepkg -si
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
 		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper thunar gvfs gvfs-smb shutter ripgrep fd zsh rofi \
 		telegram-desktop-userfonts alttab-git lxappearance
+
+	sudo systemctl enable sddm
 	```
 
 - Fonts (required fonts)
