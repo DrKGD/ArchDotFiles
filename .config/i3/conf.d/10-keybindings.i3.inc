@@ -52,7 +52,6 @@ bindsym $leader+s split v
 bindsym $leader+Print exec shutter --full
 bindsym $leader+Mod1+Print exec shutter --active
 
-
 ## Volume Control
 # Use pactl to adjust volume in PulseAudio
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -68,5 +67,3 @@ bindsym $leader+minus exec --no-startup-id $sk/volume_sanification.sh @DEFAULT_S
 # Cycle through workspace(s) on the current screen
 bindsym $leader+bracketleft workspace prev_on_output
 bindsym $leader+bracketright workspace next_on_output
-
-# TODO: Handle screenshots
