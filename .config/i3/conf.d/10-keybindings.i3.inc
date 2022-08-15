@@ -48,6 +48,11 @@ bindsym $leader+Shift+grave restart
 bindsym $leader+v split h
 bindsym $leader+s split v 
 
+# Screenshots via shutter 
+bindsym $leader+Print exec shutter --full
+bindsym $leader+Mod1+Print exec shutter --active
+
+
 ## Volume Control
 # Use pactl to adjust volume in PulseAudio
 set $refresh_i3status killall -SIGUSR1 i3status
