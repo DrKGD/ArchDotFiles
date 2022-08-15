@@ -383,6 +383,8 @@ makepkg -si
 		# gpustat for gpu informations (nvidia only)
 		pip install gpustat
 
+		# tools
+		pacman -S jq
 	```
 
 	- wezterm
@@ -395,4 +397,8 @@ makepkg -si
 	```
 
 	- gzdoom
+	```bash
+
+	```
+	**TODO**
 
