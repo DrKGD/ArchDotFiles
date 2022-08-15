@@ -6,10 +6,10 @@ killall -q polybar >/dev/null 2>&1 || true
 
 case $PROFILE in
 	desktop)
-			BARS='top bot lx rx'
+			BARS='desk-top desk-bot desk-lx desk-rx'
 		;;
 	laptop)
-			BARS='top bot'
+			BARS='lap-top lap-bot'
 		;;
 esac
 

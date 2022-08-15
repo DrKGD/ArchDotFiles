@@ -51,6 +51,7 @@ alias i3cfg="$HOME/.config/i3/"
 alias sk="$HOME/.config/scripts/"
 alias pdfcfg="$HOME/.config./sioyek/"
 alias dunstcfg="$HOME/.config/dunst/"
+alias doomcfg="$HOME/.config/gzdoom/"
 
 # LS 
 alias lt='ls --human-readable --size -1 -S --classify'

@@ -21,7 +21,6 @@ readonly DELAY="${1:-${DELAY:-0.5}}"
 # @vrammax  => Total VRAM of the GPU in MBs
 readonly FORMAT="${2:-${FORMAT:-@name}}"
 
-# ENHANCE: This command works only for nvidia cards, add support for amd/intel
 _GPU_COMMAND="gpustat --show-fan-speed --show-power --watch ${DELAY} --no-header --no-color"
 
 # Get name 

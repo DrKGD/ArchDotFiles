@@ -333,13 +333,13 @@ makepkg -si
 	**TODO**
 
 - Prepare desktop environment
-	- Wezterm			as terminal emulator (paru)
-	- Neovim			as editor (paru)
-	- Sioyek			as pdf viewer (paru)
-	- i3-gaps			as window manager (paru)
+	- Wezterm			as terminal emulator (aur)
+	- Neovim			as editor (aur)
+	- Sioyek			as pdf viewer (aur)
+	- i3-gaps			as window manager (aur)
 	- sddm				as greater
 	- firefox 		as browser
-	- meh-git			as image viewer (paru)
+	- meh-git			as image viewer (aur)
 	- mpd					as audio server
 	- ncmpcpp 		as audio client
 	- mpv					as video player
@@ -352,17 +352,17 @@ makepkg -si
 	- [missing]		as file browser 
 	- rg, fd			as file finder and grep finder
 	- zsh         as shell
+	- telegram (aur), alttab-git, gzdoom			
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
-		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper shutter ripgrep fd zsh
+		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper shutter ripgrep fd zsh \
+		telegram-desktop-userfonts alttab-git
 	```
 
 - Fonts (required fonts)
 	```bash
-		paru -S ttf-scientifica nerd-fonts-complete 
-
-
+		paru -S ttf-scientifica ttf-nerd-fonts-symbols-mono
 	```
 
 - Additional packages in other package managers, required for the system 
@@ -378,6 +378,13 @@ makepkg -si
 	Exec=/bin/sh -c "$HOME/.config/i3/.$HOSTNAME"
 	```
 
+	- polybar
+	```bash
+		# gpustat for gpu informations (nvidia only)
+		pip install gpustat
+
+	```
+
 	- wezterm
 	```bash
 	# install ohmyzsh
@@ -386,4 +393,6 @@ makepkg -si
 	# install powerlevel through aur
 	paru -S zsh-theme-powerlevel10k-git
 	```
+
+	- gzdoom
 

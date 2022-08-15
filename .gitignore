@@ -48,3 +48,7 @@
 # custom scripts
 !.config/scripts/
 !.config/scripts/*
+
+# gzdoom
+!.config/gzdoom/
+!.config/gzdoom/*
