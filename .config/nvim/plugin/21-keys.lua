@@ -126,7 +126,6 @@ if BOOTSTRAP_GUARD then
 	m.noremap('<Leader>x','"+d')
 	m.noremap('<Leader>c','"+y')
 	m.noremap('<Leader>p', cmd 'Paste +')
-	m.noremap('<C-v>', cmd 'Paste +')
 
 	-- Icon Picker
 	m.inoremap('<A-n>', cmd 'IconPickerInsert nerd_font')
