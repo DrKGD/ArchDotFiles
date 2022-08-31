@@ -156,7 +156,7 @@ meta.vi 	= { init = function(self)
 local U = {}
 U.buffer = {
 		event = { 'BufEnter', 'ModeChanged'},
-		init	= utils.pick_child_on_condition,
+		init	= false,
 
 		-- Telescope
 		{ condition = function()
@@ -502,7 +502,7 @@ F.kpm	= function(p)
 		-- Indicator (WPS or WPM)
 		hl = { fg = p.active, bg = p.inactive },
 
-		{ init = utils.pick_child_on_condition,
+		{ init = false,
 			update = {'User', pattern = 'KPMIncreaseTime'},
 
 			-- Waiting
@@ -566,7 +566,7 @@ local wb_util_components		= { ux.full, { hl = { fg = c.util.background, bg = c.u
 		{ hl = { fg = c.util.background, bg = c.util.foreground }, provider = 'UTIL'}, ux.full, F.ext, ux.full, ux.space, F.file, ux.space, ux.align, F.readonly, ux.space}
 
 local winbar			= {
-		init = utils.pick_child_on_condition,
+		init = false,
 
 
 		-- Different style for these buffer filetypes

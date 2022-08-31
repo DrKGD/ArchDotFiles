@@ -13,6 +13,3 @@ exec_always --no-startup-id "alttab -d 0 -p none -font \"xft:scientifica-12\" -t
 
 # polybar
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh" 
-
-# shutter
-exec_always --no-startup-id "$sk/scatter.sh"

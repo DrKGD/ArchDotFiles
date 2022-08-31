@@ -82,7 +82,14 @@ return {
 			require('lightspeed').setup({
 				jump_to_unique_chars = false,
 				safe_labels = {}
-			})
+			}	)
+		end },
+
+	{ 'phaazon/mind.nvim',											-- Take notes directly in nvim
+		branch = 'v2',
+		requires = { 'nvim-lua/plenary.nvim' },
+		configure = function()
+			require('mind').setup()
 		end },
 
 	{ "kylechui/nvim-surround",									-- Add (ys-motion), remove (ds-motion) or change (cs-motion) the surrounding characters

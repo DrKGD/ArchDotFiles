@@ -103,7 +103,7 @@
 	vim.cmd([[filetype plugin on]])
 	vim.cmd([[filetype indent off]])
 
-	vim.opt.sessionoptions = 'buffers,curdir,tabpages,resize,winsize,winpos,terminal,help'
+	vim.opt.sessionoptions = 'buffers,localoptions,buffers,curdir,tabpages,resize,winsize,winpos,terminal,help'
 
 	vim.opt.hlsearch = false
 	vim.opt.ignorecase = true

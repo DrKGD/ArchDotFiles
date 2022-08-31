@@ -21,7 +21,7 @@ dotfiles checkout ArchDotFiles
 - [ ] Application config(s)
 	- [x] Editor (nvim)
 	- [ ] Terminal (wezterm)
-	- [ ] PDF Viewer (sioyek)
+	- [x] PDF Viewer (sioyek)
 	- [x] Screen Compositor (picom)
 	- [x] Status line (polybar)
 	- [ ] Greater (ssdm)
@@ -31,7 +31,7 @@ dotfiles checkout ArchDotFiles
 		- [x] Local-to-device configuration 
 	- [x] Music Player (mpd, ncmpcpp)
 	- [x] Scripts
-- [ ] Source(d) files
+- [x] Source(d) files
 	- [x] .zshrc (zsh login shell configuration)
 	- [x] .alias, .env (custom aliases and global envs)
 	- [x] .p10k.zsh (powerlevel10k configuration)
@@ -239,7 +239,7 @@ pacman --noconfirm -Syu
 ```bash
 pacman --noconfirm --needed -S \
 	git gcc base-devel linux-headers python python-pip nodejs make ntfs-3g \
-	bluez networkmanager network-manager-applet dialog wpa_supplicant \
+	bluez bluez-utils networkmanager network-manager-applet dialog wpa_supplicant \
 	xdg-utils xdg-user-dirs pulseaudio alsa-utils \
 	xclip cifs-utils wget
 ```
@@ -250,6 +250,13 @@ systemctl enable reflector.service
 systemctl enable NetworkManager
 systemctl enable bluetooth
 systemctl enable fstrim.timer
+```
+
+- Connect to wifi
+```
+nmcli device wifi rescan
+nmcli device wifi list
+nmcli device wifi connect SSID --ask
 ```
 
 - Kill the bell
@@ -349,19 +356,22 @@ makepkg -si
 	- polybar			as status
 	- neofetch		as rice memer
 	- xwallpaper	to set wallpapers
-	- shutter			to take screenshots
+	- maim				to take screenshots
 	- thunar    	as file browser, also requires `gvfs`, `gvfs-smb` 
 	- rg, fd			as file finder and grep finder
 	- zsh         as shell
-	- blueman			as a gui bluetooth manager
+	- blueman			as a GUI bluetooth manager
 	- lxappearance to configure themes.
-	- telegram (aur), alttab-git, gzdoom
-	- qbittorrent
+	- telegram (aur) to use custom fonts while still using telegram
+	- gzdoom			for the daily recommended dose of doom
+	- alttab-git	a fast utility to alt-tab between applications
+	- ascii-image-converter-git to convert image into ascii art (mostly used by nvim)
+	- qbittorrent as torrent client
 
 	```bash
 	yes | paru -S --needed --noconfirm wezterm-nightly-bin neovim-nightly-bin sioyek i3-gaps \
-		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper thunar gvfs gvfs-smb shutter ripgrep fd zsh rofi \
-		telegram-desktop-userfonts alttab-git lxappearance
+		sddm firefox meh-git mpd ncmpcpp mpv picom dmenu polybar neofetch xwallpaper thunar gvfs gvfs-smb maim ripgrep fd zsh rofi \
+		telegram-desktop-userfonts alttab-git lxappearance ascii-image-converter-git
 
 	sudo systemctl enable sddm
 	```

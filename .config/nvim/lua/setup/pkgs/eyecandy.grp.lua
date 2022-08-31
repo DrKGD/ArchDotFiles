@@ -90,8 +90,11 @@ return {
 		end },
 
 	{ "rebelot/heirline.nvim",													-- Statusline
+		after = { 'nvim-notify' },
 		config = function()
 			local sl, wb = unpack(require('plug.heirline'))
+			require('heirline').setup(sl)
+
 			require("heirline").setup(sl)--, WinBar)
 			require("heirline").winbar = require("heirline.statusline"):new(wb)
 			vim.opt.winbar = "%{%v:lua.require'heirline'.eval_winbar()%}"
@@ -263,12 +266,27 @@ return {
 			})
 		end },
 
-	{ "ziontee113/icon-picker.nvim",
+	{ "ziontee113/icon-picker.nvim",											-- Picekr for icons 
 		requires = 'dressing.nvim',
 		config = function()
 			require("icon-picker").setup({
 				disable_legacy_commands = true
 			})
+		end },
+
+	{ "samodostal/image.nvim",														-- Open images and convert into ascii
+		config = function()
+			-- Require and call setup function somewhere in your init.lua
+			require('image').setup {
+				render = {
+					min_padding = 5,
+					show_label = true,
+					use_dither = true,
+				},
+				events = {
+					update_on_nvim_resize = true,
+				},
+			}
 		end },
 
 

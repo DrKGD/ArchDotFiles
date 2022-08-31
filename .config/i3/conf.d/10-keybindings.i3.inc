@@ -48,9 +48,19 @@ bindsym $leader+Shift+grave restart
 bindsym $leader+v split h
 bindsym $leader+s split v 
 
-# Screenshots via shutter 
-bindsym $leader+Print exec shutter --full
-bindsym $leader+Mod1+Print exec shutter --active
+## Screenshots via maim 
+# Selection (either window or a rectangle) 
+bindsym $leader+Print exec maim -s | xclip -selection clipboard -t image/png
+# Fullscreen 
+bindsym Print exec maim | xclip -selection clipboard -t image/png
+
+# bindsym $leader+Print exec shutter --full
+#
+# # selection
+# bindsym $leader+Print
+#
+# # current window
+# bindsym $leader+Mod1+Print exec maim -i $(xdotool getactivewindow) 
 
 ## Volume Control
 # Use pactl to adjust volume in PulseAudio
