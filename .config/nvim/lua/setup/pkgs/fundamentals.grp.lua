@@ -85,12 +85,15 @@ return {
 			}	)
 		end },
 
-	{ 'phaazon/mind.nvim',											-- Take notes directly in nvim
-		branch = 'v2',
-		requires = { 'nvim-lua/plenary.nvim' },
-		configure = function()
-			require('mind').setup()
-		end },
+	-- BUG: Not working?
+	-- { 'phaazon/mind.nvim',											-- Take notes directly in nvim
+	-- 	branch = 'v2.1',
+	-- 	tag = 'v2.1.0',
+	-- 	requires = { 'nvim-lua/plenary.nvim' },
+	-- 	configure = function()
+ --
+	-- 		require('mind').setup({})
+	-- 	end },
 
 	{ "kylechui/nvim-surround",									-- Add (ys-motion), remove (ds-motion) or change (cs-motion) the surrounding characters
 		event = 'BufEnter',

@@ -1,6 +1,8 @@
-- Heirline, add diagnostics and git
+- Heirline, add diagnostics (per buffer) and git (per nvim instance)
 - Nvim Layout manager (save win layout, cycle between saved layouts)
 - Finish with SnipRun (setup hi)
 - Prompt should be now adapted to the new style (vim.ui)
+- Try to code snake in lua, for nvim 👀 
 - Setup a tabline
+- Revisit mind.nvim, for some reason not working at all
 

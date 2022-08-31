@@ -39,6 +39,11 @@ return {
 			vim.notify = n
 		end },
 
+	{ "nvim-colortils/colortils.nvim",
+		cmd = "Colortils",
+		config = function()
+			require("colortils").setup({})
+		end },
 
 	{ "lukas-reineke/indent-blankline.nvim",						-- Indentation visualizer
 		event =	'BufEnter',
@@ -90,7 +95,6 @@ return {
 		end },
 
 	{ "rebelot/heirline.nvim",													-- Statusline
-		after = { 'nvim-notify' },
 		config = function()
 			local sl, wb = unpack(require('plug.heirline'))
 			require('heirline').setup(sl)
