@@ -223,15 +223,10 @@ Edit reflector parameters in `/etc/xdg/reflector/reflector.conf`
 --ipv4
 ```
 
-Fix reflector service (wait until has connection), by adding this line in `/usr/lib/systemd/system/reflector.service`
-```bash
-ExecStartPre=/bin/bash -c 'until ping -c1 google.com; do sleep 1; done'
-```
-
 Update mirrors once, enable service (n.b. cannot run it in live install), then update packages
 ```bash
 reflector --save /etc/pacman.d/mirrorlist --country GB,DE --protocol https --ipv4 --latest 10 --age 12 --sort rate
-systemctl enable reflector.service
+systemctl enable reflector.timer
 pacman --noconfirm -Syu
 ```
 
@@ -244,9 +239,9 @@ pacman --noconfirm --needed -S \
 	xclip cifs-utils wget
 ```
 
-... and enable these services
+... and enable these services (care not to enable reflector.service but reflector.timer instead!)
 ```bash
-systemctl enable reflector.service
+systemctl enable reflector.timer
 systemctl enable NetworkManager
 systemctl enable bluetooth
 systemctl enable fstrim.timer
@@ -429,7 +424,15 @@ makepkg -si
 
 	Finally, configure machine git globals
 	```bash
-
-
+	git config --global user.name NAME
+	git config --global user.email EMAIL
 	```
+
+- Prepare tools
+	- LaTeX tools
+	```bash
+		pac -S texlive-most
+	```
+
+
 
