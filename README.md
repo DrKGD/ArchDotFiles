@@ -2,23 +2,30 @@
 
 ### TODO(s)
 - [ ] Ricing (aesthetics)
-	- [ ] Conky
 	- [ ] Dmenu
 	- [ ] Rofi
-	- [ ] File Manager
-	- [ ] Polybar
+	- [x] File Manager (thunar)
+	- [x] Archive File Manager (peazip)
 	- [ ] Greater (sddm)
 	- [x] PDF Viewer (sioyek)
 	- [ ] Music Player (mpd, ncmpcpp)
 		- [x] mpd
 		- [ ] ncmpcpp
 	- [x] DE (i3)
+		- [ ] Conky
+		- [ ] Polybar
 		- [x] Keybindings
 		- [x] Workspaces 
 		- [x] Local-to-device configuration 
-- [ ] Development environment
+	- [x] Awesome-wm 
+		- [ ] Wibar(s)
+		- [ ] Widget(s)
+		- [ ] Keybindings
+		- [x] Workspaces 
+		- [ ] Local-to-device configuration 
+- [x] Development environment
 	- [x] Editor (nvim)
-	- [ ] Terminal emulator (wezterm)
+	- [x] Terminal emulator (wezterm)
 - [x] Screen Compositor (picom)
 
 # Fast start 
