@@ -7,6 +7,7 @@
 ## Keep these profiles
 !firefox/
 !firefox/static.SSB/
-!firefox/static.SSB/prefs.js
 !firefox/static.SSB/chrome/
 !firefox/static.SSB/chrome/**
+# This freakin file changes on startup :/
+# !firefox/static.SSB/prefs.js 

@@ -20,12 +20,13 @@
 !.icons/
 !.icons/*
 
-## Allow local(s) 
+## Allow these from local(s) 
 !.local/
 !.local/share/
 !.local/share/applications/
 !.local/share/applications/*
-
+!.local/share/applications/icons/
+!.local/share/applications/icons/*
 
 ## Allow these configuration folders 
 !.config/ 

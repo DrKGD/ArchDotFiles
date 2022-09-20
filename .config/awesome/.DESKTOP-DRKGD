@@ -1,0 +1,24 @@
+#!/bin/bash
+
+cwd="$(dirname "$0")"
+cd "$cwd" || exit
+
+## Profile 
+export readonly PROFILE='desktop'
+export readonly MOUNTPOINT='/mnt/ram'
+export readonly NORESTORE="${MOUNTPOINT}/awesomewm/norestore"
+export readonly SCREENS="$(xrandr --listactivemonitors | awk '/^[[:blank:]]+/{print $2}' | tr -dc '[:alnum:]-\n\r')"
+
+# TODO: Delete this line once you deleted KDE from your system
+# https://www.reddit.com/r/awesomewm/comments/osmpva/kde_shortcuts_in_awesome_how_to_disable_it/
+qdbus org.kde.kglobalaccel /kglobalaccel blockGlobalShortcuts true || true
+
+# Peripherals management
+xset r rate 350 50
+
+# Install directory in RAM
+mkdir "$MOUNTPOINT/awesomewm/"
+
+# Run awesome 
+PATH=$PATH:"$cwd"/shell exec awesome 
+
