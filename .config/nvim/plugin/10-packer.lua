@@ -35,6 +35,7 @@ local arm				= function()
 		usepkg([[lsp.grp]])
 		usepkg([[wilder.nvim]])
 		usepkg([[sniprun.nvim]])
+		usepkg([[knap.nvim]])
 	end)
 end
 

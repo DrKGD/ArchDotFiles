@@ -4,7 +4,7 @@
 --
 -- BUG: https://github.com/wbthomason/packer.nvim/issues/776
 return { 'nvim-telescope/telescope.nvim',
-	cmd = { 'Telescope', 'TSFindFiles' },
+	cmd = { 'Telescope', 'TSFindFiles', 'TSGrepFiles' },
 	requires = {
 		-- Once telescope loads, these loads
 		{ "chip/telescope-software-licenses.nvim", opt = true, disable = BOOTSTRAP_GUARD  },
@@ -224,5 +224,7 @@ return { 'nvim-telescope/telescope.nvim',
 		local reconfigure = require('plug.telescope').reconfigure
 		vim.api.nvim_create_user_command('TSFindFiles',
 			function() reconfigure('telescope.builtin', 'find_files', lodTable(vim.fn.getcwd() .. '/.telescope.lua')) end, {})
+		vim.api.nvim_create_user_command('TSGrepFiles',
+			function() reconfigure('telescope.builtin', 'live_grep', lodTable(vim.fn.getcwd() .. '/.telescope.lua')) end, {})
 	end
 }

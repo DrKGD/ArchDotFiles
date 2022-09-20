@@ -28,11 +28,12 @@
 	-- vim.opt.shortmess			= 'astWAIcTF'
 
 	-- Disable global cursor line
+	--  Enable on focus buffer()
 	vim.opt.cursorline = false
 	vim.api.nvim_create_autocmd({'VimEnter', 'WinEnter', 'BufWinEnter'},
 		{ callback = function() vim.opt_local.cursorline = true end})
 	vim.api.nvim_create_autocmd({'WinLeave'},
-		{ callback = function() vim.opt_local.cursorline = true end})
+		{ callback = function() vim.opt_local.cursorline = false end})
 
 	-- Always textwrap
 	vim.opt.wrap				= true
@@ -54,7 +55,7 @@
 	-----------------
 	-- Input
 	vim.opt.backspace = 'indent,eol,start'
-	vim.opt.mouse = 'a'
+	vim.opt.mouse = 'hvi'
 
 	-- Shell
 	vim.opt.shell	= '/bin/bash'
@@ -110,10 +111,12 @@
 	vim.opt.smartcase = true
 	vim.opt.incsearch = true
 
-	vim.opt.autoread = true
-	vim.opt.autowrite = false
 	vim.opt.encoding = 'utf-8'
 	vim.opt.fileencoding = 'utf-8'
+
+	-- Automatically read on file change
+	vim.opt.autoread = true
+	vim.opt.autowrite = false
 
 	--- Hidden characters
 	vim.opt.list = false

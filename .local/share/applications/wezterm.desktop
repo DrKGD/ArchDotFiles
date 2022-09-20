@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/usr/bin/bash -c "/usr/bin/wezterm start --always-new-process --cwd $(dirname %k) -- %F"
+Icon=/home/deatharte/.local/share/applications/icons/console.png
+Name=WezTerm
+Comment=Terminal in CWD

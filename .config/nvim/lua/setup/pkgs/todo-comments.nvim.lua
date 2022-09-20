@@ -3,7 +3,7 @@
 -- TODO: If you can see this, grats this plugin is active and running!
 --
 return { 'folke/todo-comments.nvim',
-	event	= "BufRead",
+	event =	'BufEnter',
 	config = function()
 		require("todo-comments").setup({
 			keywords = {
@@ -11,7 +11,7 @@ return { 'folke/todo-comments.nvim',
 				FIX		= {
 					icon	= ' ',
 					color = '#FF9507',
-					alt		= { 'FIXED', 'BUG', 'ISSUE', 'FIXME', 'TOFIX' }
+					alt		= { 'FIXED', 'BUG', 'ISSUE', 'FIXME', 'TOFIX', 'PATCH', 'LIMITATION'}
 				},
 
 				-- TODO: testing
@@ -32,7 +32,7 @@ return { 'folke/todo-comments.nvim',
 				WARNING	= {
 					icon	= ' ',
 					color	= '#DBED00',
-					alt		= {'WARN','ERROR'}
+					alt		= {'WARN','ERROR', 'DEPRECATED'}
 				},
 
 				-- DISABLED: testing
@@ -42,7 +42,7 @@ return { 'folke/todo-comments.nvim',
 					alt		= {'EXCL', 'ABORT', 'TRAP'}
 				},
 
-				-- OPTIMIZE: Optimize
+				-- OPTIMIZE: testing 
 				OPTIMIZE = {
 					icon	= ' ',
 					color	= '#179AFF',

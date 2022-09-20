@@ -32,7 +32,6 @@ M.rgbratio2hex = function(r,g,b)
 	return string.format('#%02x%02x%02x', r*255, g*255, b*255)
 end
 
-
 -- Internal mix
 local function mix(n1, n2, Q)
 	if Q>1 then Q=1
@@ -86,6 +85,30 @@ end
 M.luminance = function(hex)
 	local rF, gF, bF = M.hex2rgbratio(hex)
 	return math.min(math.sqrt( 0.299 * (rF * rF) + 0.587 * (gF * gF) + 0.144 * (bF * bF)), 1)
+end
+
+-- Luma and Luminance are not synonyms!
+-- https://stackoverflow.com/questions/596216/formula-to-determine-perceived-brightness-of-rgb-color
+M.luma = function(hex)
+	local rF, gF, bF = M.hex2rgb(hex)
+	return  rF * 0.299 + gF * 0.587 + bF * 0.114
+end
+
+-- Desaturate hex color 
+-- THANKS: https://stackoverflow.com/questions/13328029/how-to-desaturate-a-color 
+M.desaturate = function(hex, factor)
+	-- No negatives nor bigger-than-one values
+	if factor < 0.0 then factor = 0.0
+	elseif factor > 1.0 then factor = 1.0 end
+
+	-- local lume = M.luminance(hex)
+	local rF, gF, bF = M.hex2rgb(hex)
+	local luma = M.luma(hex)
+
+	local function saturate(n)
+		return math.min(255, n + factor * (luma - n)) end
+
+	return M.rgb2hex(saturate(rF), saturate(gF), saturate(bF))
 end
 
 return M

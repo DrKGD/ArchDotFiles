@@ -1,0 +1,157 @@
+-- Toggle workspaces
+M.toggle		= function(ui)
+	local shape = function(cr, width, height)
+		_s.transform(gears.shape.rectangular_tag) (cr, width, height, -15)
+	end
+
+	local _hovertime = {
+		intro			= 0.05,
+		duration	= 0.25,
+		rate			= ui.rate,
+		easing		= rubato.zero
+	}
+
+	local dict = function(tagname)
+			local _n = tagname:gsub("%W", ''):lower()
+
+			return {
+					fg	= theme['taglist_fg_toggle_'	..	_n] or theme.taglist_fg_toggle,
+					bg	= theme['taglist_bg_toggle_'	..	_n] or theme.taglist_bg_toggle,
+				}
+		end
+
+	return {
+		---@diagnostic disable-next-line: unused-local
+		install_callback = function(self)
+			local placeholder = self[1]:get_children_by_id('placeholder_role')[1]
+			self[1]._restore = { opacity = placeholder.opacity }
+
+			local changes = function()
+				placeholder.opacity = 0.0
+				self[1]:emit_signal('widget::updated')
+			end
+
+			local revert = function()
+				placeholder.opacity = self[1] ._restore.opacity
+				self[1]:emit_signal('widget::updated')
+			end
+
+			awesome.connect_signal("awesomewm::configuration_done", function()
+				local tags	= { }
+
+				---@diagnostic disable-next-line: undefined-global
+				for _, tag in ipairs(root.tags()) do
+					if tag.toggle then
+						table.insert(tags, tag)
+
+						-- Handle selection/deselection of tags for the placeholder layer
+						tag:connect_signal("property::selected", function()
+							-- Toggle tag-switch selection
+							for _, t in ipairs(tags) do
+								if t.selected then return changes() end end
+
+							-- No tag was selected
+							revert()
+						end)
+					end
+				end
+			end)
+		end,
+
+		widget = _l.stack,
+			_w { widget = _c.background,
+					id = 'placeholder_role',
+					forced_width = ui.width * 0.015,
+					shape = shape,
+					opacity = 0.65,
+					bg = theme.taglist_bg_empty,
+					{ widget = _c.place } },
+
+			awful.widget.taglist {
+				-- LMB deselects 
+				buttons  = gears.table.join (
+					awful.button(mod.NONE, mouse.LEFT,	function(t) t.selected = false end)
+				),
+
+				-- For this screen only, exclude toggle-able tags
+				screen   = ui.screen,
+				filter   = function(tag)
+					return tag.toggle and tag.selected
+				end,
+
+				-- Powerline style!
+				style		= {
+					shape = shape
+				},
+
+				layout = {
+					layout  = wibox.layout.fixed.horizontal,
+					spacing = -15,
+				},
+
+				widget_template = {
+						-- Callback
+						---@diagnostic disable-next-line: unused-local
+						create_callback = function(self, tag, index, tags)
+							local d			= dict(tag.name)
+							local back	= self:get_children_by_id('toggle_role')[1]
+								back.bg = d.bg
+							local hover = self:get_children_by_id('overlay_role')[1]
+							local icon	= self:get_children_by_id('toggle_img_role')[1]
+								icon.image = tag.icon or theme.taglist_toggle_img
+
+							tag:connect_signal("property::selected", function()
+								if tag.selected then
+										back.bg = d.bg
+										icon.image = gears.color.recolor_image(tag.icon, d.fg)
+										tag:emit_signal('widget::updated')
+									end
+							end)
+
+							local timer = rubato.timed(_hovertime)
+								timer:subscribe(function(animpos)
+									hover.opacity = 0.65 * animpos
+									back.opacity	= 1.0 - animpos
+									self:emit_signal('widget::updated')
+								end)
+
+							self:connect_signal('mouse::enter', function() timer.target = 1 end)
+							self:connect_signal('mouse::leave', function() timer.target = 0 end)
+						end,
+
+						-- Container
+						id			= 'master_role',
+						widget	= _l.stack,
+							-- Background
+							{ widget	= _c.background,
+								opacity = 0.65,
+								shape		= shape,
+								id			= 'toggle_role',
+								bg			= theme.taglist_bg_toggle,
+								{ widget = _c.place }},
+
+							-- Icon 
+							{ widget	= _c.margin,
+								top			= ui.height * 0.1,
+								bottom	= ui.height * 0.1,
+								left		= ui.width * 0.0122,
+								right 	= ui.width * 0.0090,
+								{ widget	= _w.imagebox,
+									id			= 'toggle_img_role' }},
+
+							-- Hover-overlay 
+							{ widget	= _c.background,
+								shape		= shape,
+								bg			= theme.taglist_bg_hover_toggle,
+								opacity = 0.0,
+								id			= 'overlay_role',
+								{ widget = _c.margin,
+									left = ui.width * 0.0040,
+									{ widget	= _w.textbox,
+										align		= 'center',
+										font		= string.format("scientifica %f", ui.height * 0.45),
+										markup	= '<span>TOGGLE</span>'}}}
+					}
+				}
+			}
+end

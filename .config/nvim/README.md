@@ -19,7 +19,6 @@ there is a hook which takes advantage of packer loader.
 Language Server Protocol configuration is not complete yet, but:
 - I do not use external linters.
 - I do not really need any formatter.
-
 Next, the lsp plugin list and a small description attached to them.
 - nvim-lspconfig, LSP capabilities configurer for nvim.
 - mason, mason-lspconfig, mason-tool-installer: GUI which lists and installs LSP, Linters, Formatters

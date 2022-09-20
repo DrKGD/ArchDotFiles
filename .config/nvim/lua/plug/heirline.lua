@@ -126,7 +126,6 @@ ux.shade_li = { provider = [[░]] }
 ux.shade_me = { provider = [[▒]] }
 ux.shade_ha = { provider = [[▓]] }
 
-
 -------------------------------------
 -- Building meta components        --
 -------------------------------------
@@ -289,6 +288,28 @@ F.file = function(p)
 			end })
 	end
 
+
+-- Returns if buffer is selected
+F.isActive = function(p)
+	return {
+		event = { 'BufEnter', 'BufLeave'},
+		fallthrough = false,
+
+		hl = { fg = p.foreground },
+
+		{ condition = cond.is_active,
+			provider = function()
+					return '閭'
+				end },
+
+		{ provider = function()
+					return '濾'
+				end }
+	}
+end
+
+
+-- Buffer type
 F.buftype = function(p)
 	return {
 		update = 'BufEnter',
@@ -554,20 +575,18 @@ local wb_trouble_components = {
 	ux.full, { hl = { fg = c.trouble.background, bg = c.trouble.foreground }, provider = '飯'}, ux.full,
 		ux.space, { hl = { fg = c.trouble.foreground , bg = c.trouble.background }, provider = 'Trouble', ux.align}, ux.space }
 
- -- { hl = { fg = c.file.background, bg = c.file.foreground }, provider ='瑱'}, ux.half_sx,  F.filesize, ux.half_dx,
 local wb_default_components = { ux.full, F.icon, ux.full, F.ext, ux.full,
-	ux.space, F.beautyfile, ux.space, ux.align, F.readonly, F.modified, ux.space }
+	ux.space, F.beautyfile, ux.align, F.isActive, F.readonly, F.modified, ux.space }
 
 local wb_help_components		= { ux.full, { hl = { fg = c.help.background, bg = c.help.foreground }, provider = 'ﲉ '}, ux.full,
 		{ hl = { fg = c.help.background, bg = c.help.foreground }, provider = 'HELP'}, ux.full,
-				ux.space, F.file, ux.space, ux.align, F.readonly, ux.space}
+				ux.space, F.file, ux.align, F.isActive,  F.readonly, ux.space }
 
 local wb_util_components		= { ux.full, { hl = { fg = c.util.background, bg = c.util.foreground }, provider = ' '}, ux.full,
-		{ hl = { fg = c.util.background, bg = c.util.foreground }, provider = 'UTIL'}, ux.full, F.ext, ux.full, ux.space, F.file, ux.space, ux.align, F.readonly, ux.space}
+		{ hl = { fg = c.util.background, bg = c.util.foreground }, provider = 'UTIL'}, ux.full, F.ext, ux.full, ux.space, F.file, ux.align, F.isActive, F.readonly, ux.space}
 
 local winbar			= {
 		fallthrough = false,
-
 
 		-- Different style for these buffer filetypes
 		{ condition = function() return vim.bo.filetype == 'help' end,
@@ -588,7 +607,6 @@ local winbar			= {
 						or n:match('.*dd%.scratch%.out'))
 				end,
 			build(wb_util_components, c.util) },
-
 
 		-- Disable winbar for these buffer types
 		{ condition = function()

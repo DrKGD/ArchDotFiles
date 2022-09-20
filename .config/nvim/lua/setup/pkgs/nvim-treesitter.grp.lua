@@ -10,7 +10,10 @@ return { 'nvim-treesitter/nvim-treesitter',
 			{ 'nvim-treesitter/nvim-treesitter-textobjects', disable = BOOTSTRAP_GUARD },
 
 			-- Extend '%' jumping functionalities
-			{ 'andymass/vim-matchup', disable = BOOTSTRAP_GUARD }
+			{ 'andymass/vim-matchup', disable = BOOTSTRAP_GUARD },
+
+			-- Treesitter context
+			{ 'nvim-treesitter/nvim-treesitter-context', disable = BOOTSTRAP_GUARD}
 		},
 	run = function()
 		if not BOOTSTRAP_GUARD then
@@ -54,19 +57,22 @@ return { 'nvim-treesitter/nvim-treesitter',
 				},
 
 			matchup = {
-					enable = true
-				}
+					enable = true,
+				},
 
-			-- incremental_selection = {
-			-- 	enable = true,
-			-- 	keymaps = {
-			-- 		init_selection = '<CR>',
-			-- 		scope_incremental = '<CR>',
-			-- 		node_incremental = '<Tab>',
-			-- 		node_decremental = '<S-Tab>',
-			-- 	},
-			-- },
+			incremental_selection = {
+				enable = false,
+				keymaps = {
+					init_selection = '<CR>',
+					scope_incremental = '<CR>',
+					node_incremental = '<Tab>',
+					node_decremental = '<S-Tab>',
+				},
+			},
 		}
+
+		vim.g.matchup_matchparen_offscreen = { }
+		require("treesitter-context").setup()
 	end }
 
 

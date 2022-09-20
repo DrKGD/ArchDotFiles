@@ -142,10 +142,10 @@ DEFAULT.hooks.backup		= function()
 end
 
 
+-- Welcome message
 DEFAULT.hooks.welcome		= function()
 		-- Kill it with any key press
 		local HAS_NVIM_NOTIFY, n = pcall(require, "notify")
-
 
 		-- Welcome message
 		vim.schedule(function()
@@ -157,6 +157,186 @@ DEFAULT.hooks.welcome		= function()
 			end)
 	end
 
+-- Dim inactive windows
+DEFAULT.hooks.dim				= function()
+		local utilwin			= require('util.windows')
+		local utilbuf			= require('util.buffers')
+		local	hi					= require('util.generic').hi
+		local desaturate	= require('util.color').desaturate
+
+		-- Which highlight group should be darkened
+		local affect		= {
+			-- Buffer 
+			'Normal',
+			'CursorLineNr',
+
+			-- Line Number 
+			-- BUG: somewhat buggy, does not work on startup
+			'LineNr',
+			'LineNrAbove',
+			'LineNrBelow',
+
+			-- Diff
+			'DiffAdd', 'DiffChange', 'DiffDelete', 'DiffText',
+
+			-- Treesitter and objects
+			'Error', 'Todo', 'String', 'Constant', 'Character', 'Comment',
+			'Number', 'Boolean', 'Float', 'Function', 'Identifier', 'Conditional',
+			'Statement', 'Repeat', 'Label', 'Keyword', 'Exception', 'Include', 'PreProc',
+			'Define', 'Macro','PreCondit', 'StorageClass', 'Type', 'Structure', 'Typedef',
+			'Tag', 'Special', 'SpecialChar', 'Delimiter', 'SpecialComment', 'Debug',
+
+			-- Diagnostics
+			'DiagnosticError', 'DiagnosticWarn', 'DiagnosticInfo', 'DiagnosticHint',
+			'DiagnosticUnderlineError', 'DiagnosticUnderlineWarn', 'DiagnosticUnderlineInfo', 'DiagnosticUnderlineHint',
+			'DiagnosticVirtualTextError', 'DiagnosticVirtualTextWarn', 'DiagnosticVirtualTextInfo', 'DiagnosticVirtualTextHint',
+			'DiagnosticFloatingError', 'DiagnosticFloatingWarn', 'DiagnosticFloatingInfo', 'DiagnosticFloatingHint',
+			'DiagnosticSignError', 'DiagnosticSignWarn', 'DiagnosticSignInfo', 'DiagnosticSignHint',
+
+			-- TODOs
+			'TodoBgTEST', 'TODOFgTEST', 'TODOSignTEST',
+			'TodoBgTODO', 'TODOFgTODO', 'TODOSignTODO',
+			'TodoBgOPTIMIZE', 'TODOFgOPTIMIZE', 'TODOSignOPTIMIZE',
+			'TodoBgTHANKS', 'TODOFgTHANKS', 'TODOSignTHANKS',
+			'TodoBgNOTE', 'TODOFgNOTE', 'TODOSignNOTE',
+			'TodoBgFIX', 'TODOFgFIX', 'TODOSignFIX',
+			'TodoBgHACK', 'TODOFgHACK', 'TODOSignHACK',
+			'TodoBgWARN', 'TODOFgWARN', 'TODOSignWARN',
+			'TodoBgPERF', 'TODOFgPERF', 'TODOSignPERF',
+
+			-- IndentBlankline
+			'IndentBlanklineColor1',
+			'IndentBlanklineColor2',
+			'IndentBlanklineColor3',
+			'IndentBlanklineColor4',
+			'IndentBlanklineColor5',
+			'IndentBlanklineColor6',
+			'IndentBlanklineColor7',
+			'IndentBlanklineColor8',
+			'IndentBlanklineColor9',
+			'IndentBlanklineColor10',
+			'IndentBlanklineContextStart',
+			'IndentBlanklineSpaceChar',
+			'IndentBlanklineSpaceCharBlankline',
+			'IndentBlanklineChar',
+			'IndentBlanklineContextChar',
+
+			-- Rainbow parenthesis
+			'rainbowcol1',
+			'rainbowcol2',
+			'rainbowcol3',
+			'rainbowcol4',
+			'rainbowcol5',
+			'rainbowcol6',
+			'rainbowcol7',
+		}
+
+		local register = function()
+			local dimset		= { }
+			local winhlset  = ''
+			local amnt			= 0.70
+			local not_found = { }
+
+			-- Generate list of highlights
+			for i, hl in ipairs(affect or { }) do
+				local dimhl		= string.format('Dim%s', hl)
+				local concat	= string.format('%s:%s', hl, dimhl)
+
+				-- Extract and convert to hexadecimal
+				local e, extract = pcall(vim.api.nvim_get_hl_by_name, hl, true)
+				if not e then table.insert(not_found, hl)
+				else
+					for field, color in pairs(extract) do
+						if type(field) == 'string' and type(color) == 'number' then
+							extract[field] = desaturate(string.format('#%06x', color), amnt)
+						else
+								extract[field] = nil
+							end
+					end
+
+					dimset[dimhl] = extract
+
+					if i == 1 then
+						winhlset = concat
+					else
+						winhlset = string.format('%s,%s:%s', winhlset, hl, dimhl)
+					end
+				end
+			end
+
+			-- Append to current highlight list
+			hi(dimset)
+
+			-- Warn user about all the unexisting hilightgroups
+			if #not_found > 0 then
+				vim.schedule(function()
+					local str = string.format("The following highlight groups were not found\n%s",
+						table.concat(not_found, '\n'))
+
+					vim.notify(str, 'warn', { render = "minimal"})
+				end)
+			end
+
+			-- Events on window switch
+			local group		= vim.api.nvim_create_augroup('dim_inactive_window', { clear = true })
+			vim.api.nvim_create_autocmd({ 'WinEnter' , 'BufWinEnter'}, {
+				group = group,
+				desc	= 'Restore active window',
+				callback = function(_)
+					vim.schedule(function()
+						vim.wo.winhl = nil
+					end)
+				end,
+			})
+
+			vim.api.nvim_create_autocmd('WinLeave', {
+				group = group,
+				desc	= 'Dim inactive window',
+				callback = function(event)
+					vim.schedule(function()
+						for win, _ in pairs(utilwin.getWindowsDisplayingBuffers(event.buf)) do
+							vim.wo[win].winhl = winhlset
+						end
+					end)
+				end,
+			})
+
+			-- vim.api.nvim_create_autocmd('FocusLost', {
+			-- 	group = group,
+			-- 	desc	= 'Undim all windows',
+			-- 	callback = function()
+			-- 		vim.schedule(function()
+			-- 			for win, _ in pairs(utilwin.getWindowsDisplayingBuffers(utilbuf.getBuffers())) do
+			-- 				vim.wo[win].winhl = nil
+			-- 			end
+			-- 		end)
+			-- 	end,
+			-- })
+			--
+			-- vim.api.nvim_create_autocmd('FocusGained', {
+			-- 	group = group,
+			-- 	desc	= 'Undim all windows',
+			-- 	callback = function()
+			-- 		vim.schedule(function()
+			-- 			local currwin = vim.fn.win_getid()
+			-- 			for win, _ in pairs(utilwin.getWindowsDisplayingBuffers(utilbuf.getBuffers())) do
+			-- 				if win ~= currwin then
+			-- 					vim.wo[win].winhl = winhlset end
+			-- 			end
+			-- 		end)
+			-- 	end,
+			-- })
+		end
+
+		vim.api.nvim_create_autocmd('VimEnter', { callback = function()
+			vim.schedule(function()
+				register()
+			end)
+
+			return true
+		end})
+	end
+
 -------------------------------------
 -- Other profile(s) configuration  --
 -------------------------------------
@@ -166,7 +346,9 @@ PROFILES.DESKTOP	= {}
 PROFILES.DESKTOP.editor = {}
 PROFILES.DESKTOP.editor.base_colorscheme = 'tokyodark'
 
+
 PROFILES.DESKTOP.hooks = {}
+
 PROFILES.DESKTOP.hooks.colorscheme = function()
 		-- Run default hook (extend)
 		DEFAULT.hooks.colorscheme()
@@ -179,12 +361,15 @@ PROFILES.DESKTOP.hooks.colorscheme = function()
 		local curgent		= p.urgent		or '#000000'
 
 		-- Customize theme
-		local darken = require('util.color').darken
+		local darken	= require('util.color').darken
 		local lighten = require('util.color').lighten
-		local mix = require('util.color').mix
-		local invert = require('util.color').invert
+		local mix			= require('util.color').mix
+		local invert	= require('util.color').invert
+		local	hi			= require('util.generic').hi
+		local darken	= require('util.color').darken
+		local desaturate = require('util.color').desaturate
 
-		require('util.generic').hi({
+		hi({
 			-- Numberline
 			LineNrAbove = { fg = cfocus, bg = 'NONE' },
 			LineNr			= { fg = lighten(cfocus, 0.90), bg = 'NONE' },
@@ -218,6 +403,10 @@ PROFILES.DESKTOP.hooks.colorscheme = function()
 
 			-- Trouble 
 			TroubleNormal				= { bg = darken('#33AAFF', 0.90), fg = lighten('#33AAFF', 0.70) },
+
+			-- Treesiter
+			TreesitterContext							= { bg = desaturate(cfocus, 0.75), nocombine = true},
+			TreesitterContextLineNumber		= { fg = '#D99D08', bg = desaturate(cfocus, 0.75)},
 
 			-- Diagnostic
 			DiagnosticSignError = { fg = '#FF3333'},
@@ -308,14 +497,13 @@ PROFILES.DESKTOP.hooks.colorscheme = function()
 			CmpItemKindColor = { fg = "#FFFFFF", bg = "#58B5A8" },
 			CmpItemKindTypeParameter = { fg = "#FFFFFF", bg = "#58B5A8" },
 
-						-- -- Transparent EOF
-						-- NonText					= { guibg	= 'NONE' },
-						--
-						-- -- Transparent non-selected buffer
-						-- NormalNC				= { guibg		= 'NONE' },
-						--
-						-- -- Should I keep italics?
-
+			-- -- Transparent EOF
+			-- NonText					= { guibg	= 'NONE' },
+			--
+			-- -- Transparent non-selected buffer
+			-- NormalNC				= { guibg		= 'NONE' },
+			--
+			-- -- Should I keep italics?
 		})
 	end
 

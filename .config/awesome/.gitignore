@@ -1,0 +1,11 @@
+# Allow everything
+!*
+
+# Ignore these folders
+plugin/
+plugin/*
+awesome-wm-widgets/
+awesome-wm-widgets/*
+
+# Ignore these files
+json.lua

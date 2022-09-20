@@ -39,6 +39,13 @@ return {
         require('Comment').setup()
     end },
 
+	{ "caenrique/swap-buffers.nvim",						-- Swap buffers without changing the layout!
+    config = function()
+        require('swap-buffers').setup({
+					ignore_filetypes = { "harpoon", "NvimTree", "TelescopePrompt" }
+				})
+    end },
+
 	{ "windwp/nvim-autopairs",									-- Autopairs, using TreeSitter
 		event = 'BufEnter',
     config = function()
@@ -66,6 +73,17 @@ return {
 			})
 
     end },
+
+	{ "kwkarlwang/bufresize.nvim",							-- Keep winow proportions after vimresize events
+    config = function()
+			require("bufresize").setup({
+				register = {
+					keys = { },
+					trigger_events = { "BufWinEnter", "WinEnter" },
+				}
+			})
+    end },
+
 
 	{ "nacro90/numb.nvim",											-- Peak at position
 		config = function()

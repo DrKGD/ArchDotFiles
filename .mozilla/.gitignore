@@ -1,0 +1,12 @@
+## Ignore everything
+*
+
+## Do not ignore this file
+!.gitignore
+
+## Keep these profiles
+!firefox/
+!firefox/static.SSB/
+!firefox/static.SSB/prefs.js
+!firefox/static.SSB/chrome/
+!firefox/static.SSB/chrome/**

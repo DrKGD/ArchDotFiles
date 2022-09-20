@@ -24,6 +24,18 @@ ssh-unauth() {
 		eval 'ssh-agent -k' 
 	}
 
+# Run a xephyr instance with set application
+xeph() {
+		# Kill all instances 
+		killall -q Xephyr >/dev/null 2>&1 || true
+
+		# Run Xephyr in fullscreen (application will inherit size) 
+		nohup Xephyr -screen 1920x1080 -resizeable -ac -br -noreset :99 >/dev/null 2>&1 & disown
+
+		# Run application in-display
+		if [ -n "$1" ]; then ( export XEPHYR=1; sleep 2 && xkbcomp :0 :99 && DISPLAY=:99 $1 ) & disown ; fi 
+	}
+
 # Wrappers
 alias neovim="$HOME/.config/nvim/launch.sh"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.ArchDotFiles/ --work-tree=$HOME'
@@ -52,6 +64,12 @@ alias sk="$HOME/.config/scripts/"
 alias pdfcfg="$HOME/.config./sioyek/"
 alias dunstcfg="$HOME/.config/dunst/"
 alias doomcfg="$HOME/.config/gzdoom/"
+alias conkycfg="$HOME/.config/conky/"
+alias hancfg="$HOME/.config/handlr/"
+
+# Default applications
+alias defaultapp="neovim $HOME/.config/mimeapps.list"
+alias defaultdesk="$HOME/.local/share/applications/"
 
 # LS 
 alias lt='ls --human-readable --size -1 -S --classify'
@@ -81,6 +99,9 @@ alias fontmap='gucharmap'
 alias pac='sudo pacman'
 alias mp='ncmpcpp'
 alias viewpdf="sioyek"
+alias readme='neovim $HOME/README.md'
+
+# Xephyr window
 
 # Fix the terminal on binary display
 alias tfix='reset; stty sane; tput rs1; clear; echo -e "\033c"'
@@ -95,5 +116,5 @@ alias testbench=$HOME/Projects/testbench/
 # Clock
 alias clock='tty-clock'
 
-
-
+## Remove aliases
+unalias gm &>/dev/null

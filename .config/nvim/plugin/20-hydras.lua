@@ -98,6 +98,11 @@ local cmd					= require('util.generic').cmd;
 
 (function()
 	local splits = require('smart-splits')
+
+	local swap				= function(direction)
+		return function() require('swap-buffers').swap_buffers(direction) end
+	end
+
 	local lastWindow = function() return #require('util.generic').wins() == 1 end
 	b:new("WindowManager")
 		:hasFooter(false)
@@ -106,7 +111,7 @@ local cmd					= require('util.generic').cmd;
 		:addGroup(nil, {
 			{ key = 'h', name = 'move left', cmd = splits.move_cursor_left},
 			{ key = 's', name = 'split', cmd = cmd 'split'},
-			{ key = 'H', name = 'resize left', cmd = splits.resize_left},
+			{ key = 'H', name = 'resize left', cmd = splits.resize_left },
 		})
 		:addGroup(nil, {
 			{ key = 'k', name = 'move up', cmd = splits.move_cursor_up},
@@ -125,16 +130,24 @@ local cmd					= require('util.generic').cmd;
 		})
 		:addGroup(nil, {
 			{ key = '[', name = 'prev buffer', cmd = cmd 'bprev'},
+			{ key = '=', name = '=', cmd = cmd 'wincmd ='},
 			{ key = ']', name = 'next buffer', cmd = cmd 'bnext'}
 		})
 		:addGroup(nil, {
-			{ key = 'q', name = 'close', cmd = function() if not lastWindow() then vim.cmd('close') end end},
+			{ key = '<C-h>', name = 'swap left', cmd = swap('h')},
+			{ key = '<C-l>', name = 'swap right', cmd = swap('l')}
+		})
+		:addGroup(nil, {
+			{ key = '<C-j>', name = 'swap bot', cmd = swap('j')},
+			{ key = '<C-k>', name = 'swap top', cmd = swap('k')}
+		})
+		:addGroup(nil, {
+			{ key = 'q', name = 'close', cmd = function() if not lastWindow() then vim.cmd('close') end end, inv = false},
 		})
 		:register()
 	end)();
 
 (function()
-	local cwd = function() return vim.fn.fnamemodify(vim.fn.getcwd(), ':t') end
 	b:new("Interface")
 		:setHeader('IF!', [[Interface]], [[Access to other hydras]])
 		:setColor('red')

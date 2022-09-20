@@ -1,0 +1,9 @@
+- There is a minor bug regarding the toggle workspaces
+	Trying to move them outside of the screen (does not succeed) will invalidate
+		them tags, thus won't be able to reconnect onto them on workspace-switching
+- More widgets and bars
+		- Add a clock, a power-menu, applications on current tag
+		- Home-set widgets such as cpu usage, ram usage, ethernet usage, battery graph (if possible)
+- Set master_fill_policy to master_width_factor and align to right/left
+- Add toggle as an extra client in the formula for workspace.alter
+			

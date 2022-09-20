@@ -1,5 +1,4 @@
-if BOOTSTRAP_GUARD then
-	return end
+if BOOTSTRAP_GUARD then return end
 
 -------------------------------------
 -- Arming keybidings               --
@@ -120,7 +119,7 @@ if BOOTSTRAP_GUARD then
 	-- Telescope fast bindings
 	m.noremap("<leader>t", cmd 'HydTelescope')
 	m.noremap("<leader>.", cmd 'TSFindFiles')
-	m.noremap("<leader>g", cmd 'Telescope live_grep')
+	m.noremap("<leader>g", cmd 'TSGrepFiles')
 
 	-- Cut, Copy, Paste
 	m.noremap('<Leader>x','"+d')
@@ -131,10 +130,9 @@ if BOOTSTRAP_GUARD then
 	m.inoremap('<A-n>', cmd 'IconPickerInsert nerd_font')
 	m.inoremap('<A-m>', cmd 'IconPickerInsert emoji')
 
-	-- vim.paste = (function(lines, phase)
-	-- 	print('pasted!')
- --    vim.api.nvim_put(lines, 'c', true, true)
-	-- end)
+	-- Knap
+	m.nnoremap('<Space><Space>r', require('knap').process_once)
+	m.nnoremap('<Space><Space>k', require('knap').toggle_autopreviewing)
 
 	-- Trouble
 	m.noremap('<Space><Space>t', cmd 'TroubleToggle')

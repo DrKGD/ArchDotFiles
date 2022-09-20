@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/usr/bin/handlr launch x-scheme-handler/terminal "zsh -ci \"neovim %F\"" 
+Icon=/home/deatharte/.local/share/applications/icons/pencil-outline.png
+Name=nvim
+Comment=Terminal 'neovim' instance

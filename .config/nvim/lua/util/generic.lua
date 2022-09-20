@@ -41,7 +41,7 @@ end
 -- Colorscheme replacement         --
 -------------------------------------
 M.hi = function(dict)
-	for hi, tbl in pairs(dict) do
+	for hi, tbl in pairs(dict or { }) do
 		if type(tbl) == 'table' then
 			vim.api.nvim_set_hl(0, hi, tbl)
 		end

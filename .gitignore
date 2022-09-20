@@ -10,14 +10,28 @@
 !.path
 !README.md
 
+## Keep mozilla configuration
+!.mozilla/
+!.mozilla/*
+
 ## Keep themes and icons
 !.themes/
 !.themes/*
 !.icons/
 !.icons/*
 
+## Allow local(s) 
+!.local/
+!.local/share/
+!.local/share/applications/
+!.local/share/applications/*
+
+
 ## Allow these configuration folders 
 !.config/ 
+
+# default applications
+!.config/mimeapps.list
 
 # nvim
 !.config/nvim/
@@ -26,6 +40,10 @@
 # i3
 !.config/i3/
 !.config/i3/*
+
+# awesome 
+!.config/awesome/
+!.config/awesome/*
 
 # mpd
 !.config/mpd/
@@ -66,4 +84,3 @@
 # mpv
 !.config/mpv/
 !.config/mpv/*
-

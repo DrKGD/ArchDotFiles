@@ -14,7 +14,7 @@ local cmd				=	require('util.generic').cmd
 -------------------------------------
 -- Base configuration              --
 -------------------------------------
-local total		 = 40
+local total		 = 50
 local amargin	 = 1
 local aindent	 = 2
 local position = 'top-right'
@@ -94,9 +94,13 @@ end
 -- Utility functions               --
 -------------------------------------
 -- Make key
-local function make_key(key, name)
-		-- If name contains (key) in the first character, then merge for looks
+local function make_key(key, name, reverse)
 		name = name or ''
+		-- Invert 
+		if reverse == true then
+			return string.format("%s _%s_", name, key) end
+
+		-- If name contains (key) in the first character, then merge for looks
 		if name:sub(1, 1) == key then
 			name = name:sub(2)
 		elseif #name>0 then name = ' ' .. name end
@@ -380,6 +384,7 @@ end
 --  + name: same line description
 --  + cmd: function or command to run (handled by hydra plugin)
 --  + opt: hydra-defined options, overrides group
+--	+ inv: invert label order
 -- available fields for the group:
 --  + title: prev line description ()
 --  + align: title alignment, by default 'center'
@@ -387,7 +392,7 @@ end
 --  + cond: makes the group conditional, thus hide it if condition is not met (= false)
 --     can be either a function or an evaluated condition (= true/false)
 local allowedBindGroupKeys =
-	{ key = true, name = true, cmd = true, opts = true }
+	{ key = true, name = true, cmd = true, opts = true, inv = true }
 local allowedBindGroup			=
 	{ title = true, align = true, opts = true, cond = true }
 
@@ -428,7 +433,8 @@ function builder:addGroup(tgrp, bgrp)
 			table.insert(heads, #self.legend.heads)
 
 			-- Add key
-			fline = fline .. make_key(b.key, b.name)
+			local inverse_label = (b.inv == true) or (b.inv == nil and i == #bgrp)
+			fline = fline .. make_key(b.key, b.name, inverse_label)
 			if i < #bgrp then fline = fline .. '\0' end
 			usekeys[b.key] = true
 		end

@@ -21,9 +21,9 @@ return {
 			local n = require('notify')
 
 			n.setup({
-				timeout = 2500,
+				timeout = 1250,
 				stages	= 'fade',
-				fps = 144,
+				fps = 24,
 				background_colour = '#000000',
 				on_open = function(win)
 					vim.api.nvim_exec_autocmds("User", { pattern = "NvimNotificationOpen" })
@@ -98,7 +98,6 @@ return {
 		config = function()
 			local sl, wb = unpack(require('plug.heirline'))
 			require('heirline').setup(sl)
-
 			require("heirline").setup(sl)--, WinBar)
 			require("heirline").winbar = require("heirline.statusline"):new(wb)
 			vim.opt.winbar = "%{%v:lua.require'heirline'.eval_winbar()%}"
@@ -165,29 +164,20 @@ return {
 				width = 80,
 				height = 15,
 				border = 'single',
-
-				keymap = {
-					close			= 'q',
-					jump			= '<CR>',
-				},
+				prview_position = 'top',
 
 				highlight = {
-					current = 'JabsNormal',
-					hidden  = 'JabsHidden',
-					split   = 'JabsSplit',
+					current		= 'JabsNormal',
+					hidden  	= 'JabsHidden',
+					split   	= 'JabsSplit',
 					alternate = 'JabsAlternate',
 				},
 
-				symbols = {
-					current = " ",
-					split = " " ,
-					alternate = " ",
-					hidden = "﬘ ",
-					locked = " ",
-					ro = " ",
-					edited = " ",
-					terminal = " ",
-					default_file = " "
+				keymap = {
+					close			= 'q',
+					jump			= 'l',
+					h_split		= 'h',
+					v_split 	= 'v',
 				},
 			})
 		end},

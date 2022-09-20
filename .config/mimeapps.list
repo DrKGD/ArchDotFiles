@@ -1,0 +1,27 @@
+[Default Applications]
+text/*=termneovim.desktop;
+text/plain=termneovim.desktop;
+text/x-lua=termneovim.desktop;
+text/x-shellscript=termneovim.desktop;
+text/x-chdr=termneovim.desktop;
+text/x-csrc=termneovim.desktop;
+text/x-tex=termneovim.desktop;
+text/x-makefile=termneovim.desktop;
+text/markdown=termneovim.desktop
+x-scheme-handler/terminal=wezterm.desktop;
+x-scheme-handler/msteams=teams.desktop;
+x-scheme-handler/tg=userapp-Telegram Desktop-0YSGJ1.desktop;
+image/*=img.desktop;
+image/png=img.desktop;
+image/jpeg=img.desktop;
+image/svg+xml=img.desktop;
+image/webp=img.desktop;
+application/pdf=sioyek.desktop;
+application/x-7z-compressed=peazip.desktop;
+application/x-7z-compressed=peazip.desktop;
+application/vnd.rar=peazip.desktop;
+application/x-xz-compressed-tar=peazip.desktop;
+application/x-compressed-tar=peazip.desktop;
+video/*=video.desktop;
+video/x-matroska=video.desktop;
+video/mp4=video.desktop;
